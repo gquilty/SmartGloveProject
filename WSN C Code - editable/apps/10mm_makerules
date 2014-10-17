@@ -1,0 +1,97 @@
+################################################################################
+# 10mm_makerules
+# 30-Jan-2010
+# Seán Harte
+#
+# Defines flags for calling IAR linker and compiler
+################################################################################
+
+
+# Changing this doesn't work currently
+OUTPUT_DIR = .
+
+
+# Definitions for each file at compile time
+CDEFS += -DNDEBUG
+CDEFS += -DF_CPU=$(F_CPU)UL
+
+
+# Compilation flags
+CFLAGS = $(CDEFS)
+CFLAGS += -lD $(OUTPUT_DIR)
+CFLAGS += -o $(OUTPUT_DIR)
+CFLAGS += -e
+CFLAGS += --core=plain --dptr=16,2,separate,inc --data_model=small
+CFLAGS += --code_model=near --calling_convention=idata_reentrant --nr_virtual_regs 8
+CFLAGS += --place_constants=data
+CFLAGS += --preinclude $(BOARD_HEADER)
+CFLAGS += -I $(EXTRAINCDIRS)
+CFLAGS += -I "$(IAR_DIR)/inc/"
+CFLAGS += -I "$(IAR_DIR)/inc/clib/"
+CFLAGS += -Ohz
+CFLAGS += --require_prototypes
+CFLAGS += --mfc --discard_unused_publics $(SRC)
+
+
+# Define all object files.
+OBJ = $(addsuffix .r51, $(basename $(notdir $(SRC))))
+
+
+# Flags for the linker
+LDFLAGS = -D_NR_OF_BANKS=0
+LDFLAGS += -D_CODEBANK_END=0
+LDFLAGS += -D_CODEBANK_START=0
+LDFLAGS += -I"$(IAR_DIR)/CONFIG/"
+LDFLAGS += -o $(TARGET).bin
+LDFLAGS += -Fraw-binary
+LDFLAGS += -I"$(IAR_DIR)/LIB/"
+LDFLAGS += -f "$(IAR_DIR)/config/lnk51ew_nRF9E5.xcl"
+LDFLAGS += -D?DPMASK=0x01
+LDFLAGS += -D_NR_OF_VIRTUAL_REGISTERS=8
+LDFLAGS += -D?DPS=0x86
+LDFLAGS += -D?DPL1=0x84
+LDFLAGS += -D?DPH1=0x85
+LDFLAGS += -s __program_start
+LDFLAGS += "$(IAR_DIR)/LIB/CLIB/cl-pli-nsid-2e16inc.r51"
+LDFLAGS += -D_IDATA_STACK_SIZE=$(STACK_SIZE)
+LDFLAGS += -D_EXTENDED_STACK_START=0x00
+LDFLAGS += -D_EXTENDED_STACK_END=0x00
+LDFLAGS += -D_EXTENDED_STACK_SIZE=0xFFF
+LDFLAGS += -D_PDATA_STACK_SIZE=0x80
+LDFLAGS += -D_XDATA_STACK_SIZE=0xFFF
+LDFLAGS += -D_XDATA_HEAP_SIZE=0xFF
+LDFLAGS += -D_FAR_HEAP_SIZE=0xFFF
+LDFLAGS += -D_HUGE_HEAP_SIZE=0xFFF
+LDFLAGS += -l $(TARGET).html -xhne
+
+
+# Default target.
+all: sizebefore clean build
+
+# Change the build target to build a HEX file or a library.
+build: $(TARGET).bin
+
+
+program: all program_device
+
+
+sizebefore:
+	@if test -f $(TARGET).bin; then echo Code memory size:; wc -c $(TARGET).bin; 2>/dev/null; echo; fi
+
+
+# Program the device.
+program_device: $(TARGET).bin
+	tynprog  -m nrf9e5 -i -w $(TARGET).bin -s
+
+
+# Compile and link: whole program optimization.
+%.bin: $(SRC)
+	icc8051.exe $(CFLAGS)
+	xlink.exe $(OBJ) $(PRELDFLAGS) $(LDFLAGS)
+	rm -f *.r51
+#	d52 -b $(TARGET).bin > temp.r51
+# The above line can be used to generate assembly listings if the d52 
+# disassembler ispresent.
+
+# Listing of phony targets.
+.PHONY : all sizebefore sizeafter build clean program_device program

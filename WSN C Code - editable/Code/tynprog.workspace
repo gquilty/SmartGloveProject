@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeLite_Workspace Name="tynprog" Database="./tynprog.tags">
+  <Project Name="tynprog" Path="tynprog.project" Active="No"/>
+  <Project Name="tynprog_oss" Path="tynprog_oss.project" Active="Yes"/>
+  <BuildMatrix>
+    <WorkspaceConfiguration Name="Debug" Selected="no">
+      <Project Name="tynprog" ConfigName="Debug"/>
+      <Project Name="tynprog_oss" ConfigName="Debug"/>
+    </WorkspaceConfiguration>
+    <WorkspaceConfiguration Name="Release" Selected="yes">
+      <Project Name="tynprog" ConfigName="Release"/>
+      <Project Name="tynprog_oss" ConfigName="Release"/>
+    </WorkspaceConfiguration>
+  </BuildMatrix>
+</CodeLite_Workspace>

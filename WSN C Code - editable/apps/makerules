@@ -1,0 +1,176 @@
+################################################################################
+# makerules
+# Seán Harte
+#
+# This file has some makefile definitions that are used for both 10mm and 25mm
+# projects. A list of the source files to compile is made and passed onto the
+# relevent board specific makefile.
+################################################################################
+
+
+# Change COM port here
+#     Set to "COMx" (e.g. "COM4") if using JTAG programmer. If using a USB JTAG
+#     programmer, the com port can be found by right-clicking "my computer",
+#     then going to "Device Manager" in the "Hardware" tab. Look for "USB Serial
+#     Port" under "Ports (COM & LPT)".
+#     Set to "USB" if using the Tyndall USB programming board.
+################
+PROG_PORT = USB
+################
+
+################
+AVRDUDE_PROGRAMMER = jtagmkI
+################
+
+
+# The full path to the 8051 directory of the IAR installation.
+################
+ IAR_DIR = C:/Program Files/IAR Systems/Embedded Workbench 5.3/8051
+#IAR_DIR = C:/Program Files/IAR Systems/Embedded Workbench 5.4 Kickstart/8051
+################
+
+
+# Stack size control for 10mm nodes. After compiling a *.lst file is produced.
+# Near the end, there is a section "Maximum stack usage in bytes". The biggest
+# value there should be smaller than the value here:
+################
+STACK_SIZE = 0x40
+################
+
+
+# Address of bootloader section in ATmega128 (for 2kB bootloader)
+BOOTLOAD = 0x1F800
+
+
+# Check if board is 10mm or 25mm
+BOARD = 25mm
+ifeq ($(BOARD_HEADER), "board/10_nrf9e5_433.h")
+BOARD = 10mm
+endif
+ifeq ($(BOARD_HEADER), "board/10_nrf9e5_868.h")
+BOARD = 10mm
+endif
+
+
+# Included in every project. Code that's not needed will not be in the final
+# binary so it's easier to just put all files here.
+
+LIB_PATH = ../../library
+
+SRC = $(TARGET).c
+SRC += $(LIB_PATH)/ad7998.c
+SRC += $(LIB_PATH)/TMP102.c
+SRC += $(LIB_PATH)/crc16.c
+SRC += $(LIB_PATH)/eeprom_i2c.c
+SRC += $(LIB_PATH)/sht.c
+SRC += $(LIB_PATH)/simpleIo.c
+SRC += $(LIB_PATH)/spi.c
+SRC += $(LIB_PATH)/xxtea.c
+#SRC += $(LIB_PATH)/tbim.c
+#SRC += $(LIB_PATH)/adc7940.c
+SRC += $(LIB_PATH)/spi_adxl345.c
+SRC += $(LIB_PATH)/AD7490.c
+ifeq ($(MSG_USE), TRUE)
+SRC += $(LIB_PATH)/msg.c
+endif
+
+
+# Specific for 10mm boards
+ifeq ($(BOARD), 10mm)
+SRC += $(LIB_PATH)/i2c_sw.c
+SRC += $(LIB_PATH)/printf.c
+SRC += $(LIB_PATH)/nrf/delay_nrf.c
+SRC += $(LIB_PATH)/nrf/eeprom_mcu_nrf.c
+SRC += $(LIB_PATH)/nrf/nrf_regx.c
+SRC += $(LIB_PATH)/nrf/reprog_nrf.c
+SRC += $(LIB_PATH)/nrf/rf_nrf9x5.c
+SRC += $(LIB_PATH)/nrf/spi_nrf.c
+SRC += $(LIB_PATH)/adxl345.c
+
+ifeq ($(ADC_USE), TRUE)
+SRC += $(LIB_PATH)/nrf/adc_nrf.c
+endif
+
+ifeq ($(UART_USE), TRUE)
+SRC += $(LIB_PATH)/nrf/uart_nrf.c
+endif
+
+
+# Specific for 25mm boards
+else
+SRC += $(LIB_PATH)/slzw.c
+SRC += $(LIB_PATH)/avr/eeprom_mcu_avr.c
+SRC += $(LIB_PATH)/avr/sleep_avr.c
+
+ifeq ($(ADC_USE), TRUE)
+SRC += $(LIB_PATH)/avr/adc_avr.c
+endif
+
+ifeq ($(DELAY_USE), TRUE)
+ifeq ($(MCU), atmega128)
+SRC += $(LIB_PATH)/avr/delay_at128.c
+else
+SRC += $(LIB_PATH)/avr/delay_avr.c
+endif
+endif
+
+ifeq ($(EXTERNINT_USE), TRUE)
+SRC += $(LIB_PATH)/avr/externInt_avr.c
+endif
+
+ifeq ($(REPROG_USE), TRUE)
+SRC += $(LIB_PATH)/avr/reprog_avr.c
+endif
+
+ifeq ($(UART_USE), TRUE)
+SRC += $(LIB_PATH)/avr/uart_avr.c
+endif
+
+# Include correct radio code
+ifeq ($(BOARD_HEADER), "board/25_2420_revA.h")
+SRC += $(LIB_PATH)/avr/rf_2420.c
+SRC += $(LIB_PATH)/i2c_sw.c
+endif
+ifeq ($(BOARD_HEADER), "board/25_2420_revB.h")
+SRC += $(LIB_PATH)/avr/rf_2420.c
+SRC += $(LIB_PATH)/avr/i2c_hw_avr.c
+endif
+ifeq ($(BOARD_HEADER), "board/25_Bluetooth_rev1_0.h")
+#SRC += $(LIB_PATH)/avr/rf_2420.c
+SRC += $(LIB_PATH)/avr/i2c_hw_avr.c
+endif
+ifeq ($(BOARD_HEADER), "board/25_nrf905_revA_433.h")
+SRC += $(LIB_PATH)/nrf/rf_nrf9x5.c
+SRC += $(LIB_PATH)/avr/i2c_hw_avr.c
+endif
+ifeq ($(BOARD_HEADER), "board/25_nrf905_revA_868.h")
+SRC += $(LIB_PATH)/nrf/rf_nrf9x5.c
+SRC += $(LIB_PATH)/avr/i2c_hw_avr.c
+endif
+ifeq ($(BOARD_HEADER), "board/25_nrf905_revB_433.h")
+SRC += $(LIB_PATH)/nrf/rf_nrf9x5.c
+SRC += $(LIB_PATH)/avr/i2c_hw_avr.c
+endif
+ifeq ($(BOARD_HEADER), "board/25_nrf905_revB_868.h")
+SRC += $(LIB_PATH)/nrf/rf_nrf9x5.c
+SRC += $(LIB_PATH)/avr/i2c_hw_avr.c
+endif
+
+endif
+
+
+# List any extra directories to look for include files here.
+#     Each directory must be seperated by a space.
+#     Use forward slashes for directory separators.
+#     For a directory that has spaces, enclose it in quotes.
+EXTRAINCDIRS = $(LIB_PATH)
+
+
+ifeq ($(BOARD), 10mm)
+include ../10mm_makerules
+else
+include ../25mm_makerules
+endif
+
+clean:
+	rm -f *prs7* *prst7* tmpPrst.tgz $(TARGET).bin $(TARGET).lst $(TARGET).html $(TARGET).hex $(TARGET).bin $(TARGET).eep $(TARGET).cof $(TARGET).elf $(TARGET).map $(TARGET).sym $(TARGET).lss gmon.out nrf9e5_out.bin
