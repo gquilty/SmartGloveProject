@@ -133,6 +133,43 @@ static unsigned char i,j;
 static double tempresult;
   uint8_t Bdata[25];
   uint16_t adcValue;
+  
+  //---------*********TIMER**********-----------
+  
+// these values are changed in an ISR, so they must be declared as volatile
+volatile uint8_t timer0_ticks;
+volatile uint16_t seconds;
+  
+
+/********************************************************************************
+Interrupt Routines
+********************************************************************************/
+
+// timer1 overflow
+ISR(TIMER1_OVF_vect) {
+   // printf("***** Timer1 Overflow *****\n");
+}
+// timer0 overflow
+ISR(TIMER0_OVF_vect) {
+    // 61 ticks = 2 seconds @ 8.0MHz
+    timer0_ticks++;
+	//printf("Its been %u ticks.\n",timer0_ticks);
+    if(timer0_ticks==30){
+        // fake it, notice the printf is printing seconds+1
+       // printf("Its been %u second.\n",seconds+1);
+    }
+    if(timer0_ticks==61){
+        timer0_ticks = 0;
+        // till you make it, now we increment seconds twice
+        seconds++;
+        seconds++;
+       // printf("Its been %u seconds.\n",seconds);
+    }
+}
+
+
+
+  //---------*********TIMER**********-----------
 
 int main(void)
 {
@@ -149,6 +186,21 @@ int main(void)
 	sensor_OUT;
     sensor_off;
 	
+	  //---------*********TIMER**********-----------
+    // enable timer overflow interrupt for both Timer0 and Timer1
+    TIMSK=(1<<TOIE0) | (1<<TOIE1);
+
+    // set timer0 counter initial value to 0
+    TCNT0=0x00;
+    // start timer0 with /1024 prescaler
+    TCCR0 = (1<<CS02) | (1<<CS00);
+    // lets turn on 16 bit timer1 also
+    TCCR1B |= (1 << CS10) | (1 << CS12);
+
+    // enable interrupts
+    sei(); 
+	
+	  //---------*********TIMER**********-----------
 
 	
 	
@@ -210,6 +262,7 @@ for(j=0;j<16;j++)
 	
 		uc_sw_MUX_BEND_EN_HI;//Interface Disabled
 		uc_sw_MUX_ACC_EN_HI;//Disconnect interface
+	
 		
 	//read accelerometers 
 	txBuffer[0] = '-';
@@ -217,6 +270,7 @@ for(j=0;j<16;j++)
 	
 	putchar('-');
 	putchar('-');
+	printf("%u,",timer0_ticks);
 		for(j=2;j<5;j++)
 		{
 			if(j&0x01)uc_sw_MUX_A0_HI;
