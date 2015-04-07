@@ -42,21 +42,35 @@ namespace ProbabilityFunctions
             while ((datasample = dataStream.ReadLine()) != null)
             {
 
-                // datasample has the current line of text - write it to the console.
+                // datasample has the current line of text - needs to be split
                 string[] split = datasample.Split(new Char [] {' '});
 
                 // Add this line to training data
                 table.Rows.Add("NO_BEND", split[0], split[1], split[2], split[3], split[4], split[5], 
                                             split[6], split[7], split[8], split[9], split[10], split[11]);
-                //table.Rows.Add("No Bend", split);
             }
 
+            /*
+            file = "FullBend.txt";
+            dataStream = new StreamReader(file);
+            while ((datasample = dataStream.ReadLine()) != null)
+            {
+
+                // datasample has the current line of text 
+                string[] split = datasample.Split(new Char[] { ' ' });
+
+                // Add this line to training data
+                table.Rows.Add("FULL_BEND", split[0], split[1], split[2], split[3], split[4], split[5],
+                                                split[6], split[7], split[8], split[9], split[10], split[11]);
+
+            }
+            */
             file = "SlightBend.txt";
             dataStream = new StreamReader(file);
             while ((datasample = dataStream.ReadLine()) != null)
             {
 
-                // datasample has the current line of text - write it to the console.
+                // datasample has the current line of text
                 string[] split = datasample.Split(new Char[] { ' ' });
 
                 // Add this line to training data
@@ -64,18 +78,7 @@ namespace ProbabilityFunctions
                                                 split[6], split[7], split[8], split[9], split[10], split[11]);
             }
 
-            file = "FullBend.txt";
-            dataStream = new StreamReader(file);
-            while ((datasample = dataStream.ReadLine()) != null)
-            {
-
-                // datasample has the current line of text - write it to the console.
-                string[] split = datasample.Split(new Char[] { ' ' });
-
-                // Add this line to training data
-                //table.Rows.Add("Full Bend", split[0], split[1], split[2], split[3], split[4], split[5],
-                //                                split[6], split[7], split[8], split[9], split[10], split[11]);
-            }
+            
 
 
             Classifier classifier = new Classifier(); 
@@ -89,12 +92,14 @@ namespace ProbabilityFunctions
 
         public void TestClassifier()
         {
-
+            
             int success = 0;
             /*
              * Known cases -  these are known gestures used to test if the training data taken above is sufficient
              * Print expected classification, and actual classification
              */
+
+            /*
             Console.WriteLine("\n|----------------------------------------------------------|\n");
 
             // Should be classed as No Bend            
@@ -112,7 +117,9 @@ namespace ProbabilityFunctions
 
             Console.WriteLine("Input values: \t 0.064, 0.163718, 0.8121878, 0.0799064, 0.183594, 0.9078128, 0.2364066, 0.0234374, 0.7632812, 0.902344, 1.666113, 1.220742");
             Console.WriteLine("\nExpected Gesture: \t\tNO_BEND");
+            
             received = Classify(new double[] { 0.064, 0.163718, 0.8121878, 0.0799064, 0.183594, 0.9078128, 0.2364066, 0.0234374, 0.7632812, 0.902344, 1.666113, 1.220742 });
+            
             if (received.Equals("NO_BEND"))
                 success++;
             Console.WriteLine("Received Gesture: \t\t" + received);
@@ -159,6 +166,27 @@ namespace ProbabilityFunctions
 
             Console.WriteLine("\n|----------------------------------------------------------|\n");
             Console.WriteLine("Testing finished:\t" + success + "\\5 successful classifications.");
+            */
+
+            string file = "NoBendContinuous.txt";
+            StreamReader dataStream = new StreamReader(file);
+            string datasample;
+            int j = 0;
+            while ((datasample = dataStream.ReadLine()) != null)
+            {
+
+                // datasample has the current line of text
+                string[] split = datasample.Split(new Char[] { ' ' });
+                double[] splitDouble = new double[12];
+
+                for (int i = 0; i < split.Count(); i++)
+                {
+                    splitDouble[i] = Double.Parse(split[i]);
+                }
+                string received = Classify(splitDouble);
+                Console.WriteLine(++j + "\t" + received);
+                System.Threading.Thread.Sleep(100);
+            }
 
             Console.Read();
         }
@@ -202,6 +230,7 @@ namespace ProbabilityFunctions
         {
             Dictionary<string, double> score = new Dictionary<string, double>();
 
+
             var results = (from myRow in dataSet.Tables[0].AsEnumerable()
                             group myRow by myRow.Field<string>(dataSet.Tables[0].Columns[0].ColumnName) into g
                             select new { Name = g.Key, Count = g.Count() }).ToList();
@@ -232,9 +261,16 @@ namespace ProbabilityFunctions
                 }
 
                 score.Add(results[i].Name, finalScore * 0.5);
+
+                // writes the gesture names and their probability score to screen
+                //Console.WriteLine(results[i].Name + " \t" + score[results[i].Name]);
             }
 
             double maxOne = score.Max(c => c.Value);
+
+            if (maxOne < 100)
+                return "None Found";
+
             var name = (from c in score
                         where c.Value == maxOne
                         select c.Key).First();
