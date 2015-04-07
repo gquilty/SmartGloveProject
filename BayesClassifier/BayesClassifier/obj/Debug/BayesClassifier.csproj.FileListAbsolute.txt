@@ -1,0 +1,6 @@
+D:\College\Project\BayesClassifier\BayesClassifier\bin\Debug\BayesClassifier.exe.config
+D:\College\Project\BayesClassifier\BayesClassifier\obj\Debug\BayesClassifier.csprojResolveAssemblyReference.cache
+D:\College\Project\BayesClassifier\BayesClassifier\bin\Debug\BayesClassifier.exe
+D:\College\Project\BayesClassifier\BayesClassifier\bin\Debug\BayesClassifier.pdb
+D:\College\Project\BayesClassifier\BayesClassifier\obj\Debug\BayesClassifier.exe
+D:\College\Project\BayesClassifier\BayesClassifier\obj\Debug\BayesClassifier.pdb
