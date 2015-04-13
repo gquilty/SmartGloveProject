@@ -138,7 +138,7 @@ static double tempresult;
   
 // these values are changed in an ISR, so they must be declared as volatile
 volatile uint8_t timer0_ticks;
-volatile uint16_t seconds;
+volatile uint16_t overflowCount;
   
 
 /********************************************************************************
@@ -154,15 +154,17 @@ ISR(TIMER0_OVF_vect) {
     // 61 ticks = 2 seconds @ 8.0MHz
     timer0_ticks++;
 	//printf("Its been %u ticks.\n",timer0_ticks);
-    if(timer0_ticks==30){
-        // fake it, notice the printf is printing seconds+1
-       // printf("Its been %u second.\n",seconds+1);
+    if(timer0_ticks < 10){
+        //fake it 
     }
     if(timer0_ticks==61){
         timer0_ticks = 0;
         // till you make it, now we increment seconds twice
-        seconds++;
-        seconds++;
+		if(overflowCount >= 100){
+			overflowCount = 0;
+		}else{
+			overflowCount++;
+		}
        // printf("Its been %u seconds.\n",seconds);
     }
 }
@@ -264,14 +266,9 @@ for(j=0;j<16;j++)
 		uc_sw_MUX_ACC_EN_HI;//Disconnect interface
 	
 		
-	//read accelerometers 
-	txBuffer[0] = '-';
-	txBuffer[1] = '-';
-	
-	putchar('-');
-	putchar('-');
-	printf("%u,",timer0_ticks);
-		for(j=2;j<5;j++)
+	//read accelerometers s
+	printf("%u.%.2u,",overflowCount,timer0_ticks);
+		for(j=0;j<16;j++)
 		{
 			if(j&0x01)uc_sw_MUX_A0_HI;
 			else uc_sw_MUX_A0_LO;
@@ -312,12 +309,12 @@ for(j=0;j<16;j++)
 			putchar(Bdata[1]);
 			putchar(Bdata[2]);
 			putchar(Bdata[3]);
-			putchar(Bdata[4]);
+			putchar(Bdata[4]);	
+			putchar(Bdata[5]);
+			putchar(Bdata[6]);
+			putchar(Bdata[7]);
+			putchar(Bdata[8]);
 			putchar(',');
-			//putchar(Bdata[5]);---
-			//putchar(Bdata[6]);---
-			//putchar(Bdata[7]);---
-			//putchar(Bdata[8]);
 
 
 					
@@ -333,7 +330,7 @@ for(j=0;j<16;j++)
 		
 	
 			
-		for(j=2;j<5;j++)
+		for(j=0;j<16;j++)
 		{
 			if(j&0x01)uc_sw_MUX_A0_HI;
 			else uc_sw_MUX_A0_LO;
@@ -387,7 +384,7 @@ for(j=0;j<16;j++)
 			
 			
 			
-			if(i==0)
+			if(i==0 && j < 5)
 			{
 				
 				putchar(Bdata[0]);
@@ -395,14 +392,27 @@ for(j=0;j<16;j++)
 				putchar(Bdata[2]);
 				putchar(Bdata[3]);
 				putchar(Bdata[4]);
-				//putchar(Bdata[5]);---
-				//putchar(Bdata[6]);---
-				//putchar(Bdata[7]);---
-				//putchar(Bdata[8]);
+				putchar(Bdata[5]);
+				putchar(Bdata[6]);
+				putchar(Bdata[7]);
+				putchar(Bdata[8]);
 				putchar(',');
 				
 			
-			} 
+			} else if(i==0 && j == 5){
+			
+				putchar(Bdata[0]);
+				putchar(Bdata[1]);
+				putchar(Bdata[2]);
+				putchar(Bdata[3]);
+				putchar(Bdata[4]);
+				putchar(Bdata[5]);
+				putchar(Bdata[6]);
+				putchar(Bdata[7]);
+				putchar(Bdata[8]);
+				putchar('*');
+				
+			}
 					
 		}
 		
@@ -416,7 +426,7 @@ for(j=0;j<16;j++)
 		//}
 		//		rf_send(DEST_ADDR, txBuffer, 99);
 			//delay_ms(7);
-			putchar('\n');
+			
 			}
 }
 
