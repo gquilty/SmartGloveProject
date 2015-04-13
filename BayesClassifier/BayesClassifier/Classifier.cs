@@ -5,6 +5,8 @@ using System.Text;
 using System.Data;
 using System.IO;
 
+using GloveApplication;
+
 namespace BayesClassifier
 {
     public class Classifier
@@ -13,7 +15,7 @@ namespace BayesClassifier
         private List<Gesture> Gestures;
         private List<string> GestureTypes;
 
-        private int RecognitionThreshold;
+        private double RecognitionThreshold;
 
         public Classifier()
         {
@@ -21,17 +23,8 @@ namespace BayesClassifier
             Gestures = new List<Gesture>();
             GestureTypes = LoadGestureTypes();
 
-            RecognitionThreshold = 100;
+            RecognitionThreshold = 0.001;
         }
-
-        static int Main(string[] args) {
-
-            Classifier classifier = new Classifier();
-            classifier.run();
-
-            return 0;
-        }
-
 
         public void run()
         {
@@ -60,7 +53,7 @@ namespace BayesClassifier
 
             foreach (Gesture g in Gestures)
             {
-                Console.WriteLine(g.RawData.Count());
+                
                 // oops need to seperate rows
                 foreach (var dataEntry in g.RawData)
                 {
@@ -76,7 +69,7 @@ namespace BayesClassifier
 
 
             // TODO Replace this with read real time
-            string file = "GestureData\\NoBendContinuous.txt";
+           /* string file = "GestureData\\NoBendContinuous.txt";
             StreamReader dataStream = new StreamReader(file);
             string dataSample;
             int j = 0;
@@ -94,9 +87,31 @@ namespace BayesClassifier
                 string received = Classify(splitDouble);
                 Console.WriteLine(++j + "\t" + received);
                 System.Threading.Thread.Sleep(100);
+            }*/
+           
+        }
+
+        
+        public void handleBufferEntry(string dataSample)
+        {
+            
+            string[] split = dataSample.Split(new Char[] { ',' });
+            
+            double[] splitDouble = new double[13];
+
+            for (int i = 0; i < split.Count(); i++)
+            {
+                // Skip the time variable
+                if (i == 0)
+                {
+                    continue;
+                }
+                
+                splitDouble[i] = Double.Parse(split[i]);
             }
 
-            Console.WriteLine("\n\n\nPress Enter to exit."); Console.Read();
+            string detectedGesture = Classify(splitDouble);
+            Console.WriteLine("Received:\t" + detectedGesture);
         }
 
 
@@ -113,7 +128,6 @@ namespace BayesClassifier
             string gesture;
             while ((gesture = dataStream.ReadLine()) != null)
             {
-                //Console.WriteLine(gesture);
                 gestures.Add(gesture);
             }
 
@@ -152,13 +166,13 @@ namespace BayesClassifier
             return new Gesture(gestureRawData, gestureType);
         }
 
-
+        /*
         // Takes Gesture data and makes DataTable for TrainClassifier()
         public void constructTrainingData()
         {
             
 
-        }
+        }*/
 
         public void TrainClassifier(DataTable GestureTable)
         {
@@ -195,6 +209,9 @@ namespace BayesClassifier
             }
         }
 
+
+
+        int j = 0;
         public string Classify(double[] obj)
         {
             Dictionary<string, double> score = new Dictionary<string, double>();
@@ -232,7 +249,7 @@ namespace BayesClassifier
                 score.Add(results[i].Name, finalScore * 0.5);
 
                 // writes the gesture names and their probability score to screen
-                //Console.WriteLine(results[i].Name + " \t" + score[results[i].Name]);
+                Console.WriteLine(j++ + ": " + results[i].Name + " \t" + score[results[i].Name]);
             }
 
             double maxOne = score.Max(c => c.Value);
