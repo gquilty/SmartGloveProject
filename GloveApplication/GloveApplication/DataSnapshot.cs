@@ -7,9 +7,9 @@ namespace GloveApplication
 {
     class DataSnapshot
     {
-        public List<float> gloveData;
+        public List<double> gloveData;
 
-        public DataSnapshot(List<float> gloveData)
+        public DataSnapshot(List<double> gloveData)
         {
             gloveData = this.gloveData;
         }

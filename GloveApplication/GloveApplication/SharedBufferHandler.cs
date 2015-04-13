@@ -14,14 +14,14 @@ using Disruptor.Dsl;
 
 namespace GloveApplication
 {
-    public class DataCommunicationHandler : IEventHandler<ValueEntry>
+    public class SharedBufferHandler : IEventHandler<SharedBufferValue>
     {
         public MovingAverageFilter avgLayer;
 
-        public void OnNext(ValueEntry data, long sequence, bool endOfBatch)
+        public void OnNext(SharedBufferValue data, long sequence, bool endOfBatch)
         {
             // Console.WriteLine("Event handled: Value = {0} (processed event {1}", data.Value, sequence);
-            avgLayer.movingAverage2(data.Value);
+
         }
     }
 }

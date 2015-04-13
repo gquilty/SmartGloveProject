@@ -18,6 +18,7 @@ namespace GloveApplication
     {
         List<List<string>> lastValues = new List<List<string>>();
         List<double> averagedData = new List<double>();
+        SharedBuffer sharedBuffer = new SharedBuffer();
 
         public void movingAverage2(string data)
         {
@@ -71,12 +72,15 @@ namespace GloveApplication
                     
                 }
 
-                string avgData = "";
+                //string avgData = "";
                 if (averagedData.Count() < 13)
                 {
+                    //Uncomplete Data is useless in gesture system so its discarded
+                    //This may leave gaps in the system but with large throughput it tends to be neglagible
                 }
                 else
                 {
+                    /*
                     for (int i = 0; i < averagedData.Count(); i++)
                     {
                         avgData += ((averagedData[i].ToString()) + ",");
@@ -85,6 +89,10 @@ namespace GloveApplication
                     {
                         file.WriteLine(avgData);
                     }
+                    */
+
+                    DataSnapshot averagedSnapshot = new DataSnapshot(averagedData);
+                    sharedBuffer.run(averagedSnapshot);
                 }
                 averagedData.Clear();
                 
