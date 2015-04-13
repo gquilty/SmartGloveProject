@@ -4,3 +4,9 @@ D:\College\Project\BayesClassifier\BayesClassifier\bin\Debug\BayesClassifier.exe
 D:\College\Project\BayesClassifier\BayesClassifier\bin\Debug\BayesClassifier.pdb
 D:\College\Project\BayesClassifier\BayesClassifier\obj\Debug\BayesClassifier.exe
 D:\College\Project\BayesClassifier\BayesClassifier\obj\Debug\BayesClassifier.pdb
+D:\College\Project\Git\Glove\BayesClassifier\BayesClassifier\bin\Debug\BayesClassifier.exe.config
+D:\College\Project\Git\Glove\BayesClassifier\BayesClassifier\obj\Debug\BayesClassifier.exe
+D:\College\Project\Git\Glove\BayesClassifier\BayesClassifier\obj\Debug\BayesClassifier.pdb
+D:\College\Project\Git\Glove\BayesClassifier\BayesClassifier\obj\Debug\BayesClassifier.csprojResolveAssemblyReference.cache
+D:\College\Project\Git\Glove\BayesClassifier\BayesClassifier\bin\Debug\BayesClassifier.exe
+D:\College\Project\Git\Glove\BayesClassifier\BayesClassifier\bin\Debug\BayesClassifier.pdb

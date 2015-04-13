@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ProbabilityFunctions
+namespace BayesClassifier
 {
     public static class Helper
     {

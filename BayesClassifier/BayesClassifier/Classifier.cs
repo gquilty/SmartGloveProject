@@ -5,178 +5,86 @@ using System.Text;
 using System.Data;
 using System.IO;
 
-namespace ProbabilityFunctions
+namespace BayesClassifier
 {
     public class Classifier
     {
-        private DataSet dataSet = new DataSet();
-        
-        public DataSet DataSet
-        {
-            get { return dataSet; }
-            set { dataSet = value; }
-        }
+        private DataSet TrainedData;
+        private List<Gesture> Gestures;
+        private List<string> GestureTypes;
 
+        private int RecognitionThreshold;
+
+        public Classifier()
+        {
+            TrainedData = new DataSet();
+            Gestures = new List<Gesture>();
+            GestureTypes = LoadGestureTypes();
+
+            RecognitionThreshold = 100;
+        }
 
         static int Main(string[] args) {
 
-            DataTable table = new DataTable(); 
-            table.Columns.Add("GestureType");
-            table.Columns.Add("1X", typeof(double));
-            table.Columns.Add("1Y", typeof(double));
-            table.Columns.Add("1Z", typeof(double));
-            table.Columns.Add("2X", typeof(double));
-            table.Columns.Add("2Y", typeof(double));
-            table.Columns.Add("2Z", typeof(double));
-            table.Columns.Add("3X", typeof(double));
-            table.Columns.Add("3Y", typeof(double));
-            table.Columns.Add("3Z", typeof(double));
-            table.Columns.Add("4X", typeof(double));
-            table.Columns.Add("4Y", typeof(double));
-            table.Columns.Add("4Z", typeof(double));  
-
-            //training data. 
-            String file = "NoBend.txt";
-            StreamReader dataStream = new StreamReader(file);
-            string datasample;
-            while ((datasample = dataStream.ReadLine()) != null)
-            {
-
-                // datasample has the current line of text - needs to be split
-                string[] split = datasample.Split(new Char [] {' '});
-
-                // Add this line to training data
-                table.Rows.Add("NO_BEND", split[0], split[1], split[2], split[3], split[4], split[5], 
-                                            split[6], split[7], split[8], split[9], split[10], split[11]);
-            }
-
-            /*
-            file = "FullBend.txt";
-            dataStream = new StreamReader(file);
-            while ((datasample = dataStream.ReadLine()) != null)
-            {
-
-                // datasample has the current line of text 
-                string[] split = datasample.Split(new Char[] { ' ' });
-
-                // Add this line to training data
-                table.Rows.Add("FULL_BEND", split[0], split[1], split[2], split[3], split[4], split[5],
-                                                split[6], split[7], split[8], split[9], split[10], split[11]);
-
-            }
-            */
-            file = "SlightBend.txt";
-            dataStream = new StreamReader(file);
-            while ((datasample = dataStream.ReadLine()) != null)
-            {
-
-                // datasample has the current line of text
-                string[] split = datasample.Split(new Char[] { ' ' });
-
-                // Add this line to training data
-                table.Rows.Add("SLIGHT_BEND", split[0], split[1], split[2], split[3], split[4], split[5],
-                                                split[6], split[7], split[8], split[9], split[10], split[11]);
-            }
-
-            
-
-
-            Classifier classifier = new Classifier(); 
-            classifier.TrainClassifier(table);
-
-            classifier.TestClassifier();
+            Classifier classifier = new Classifier();
+            classifier.run();
 
             return 0;
         }
 
 
-        public void TestClassifier()
+        public void run()
         {
-            
-            int success = 0;
-            /*
-             * Known cases -  these are known gestures used to test if the training data taken above is sufficient
-             * Print expected classification, and actual classification
-             */
 
-            /*
-            Console.WriteLine("\n|----------------------------------------------------------|\n");
+            // Instantiate a Gesture object for each type of known gesture
+            foreach (string gesture in GestureTypes)
+            {
+                Gesture newGesture = LoadTrainingData(gesture);
+                Gestures.Add(newGesture);
+            }
 
-            // Should be classed as No Bend            
-            Console.WriteLine("Input values: \t 0.064062,0.1617188,0.8421878,0.0789064,0.183594,0.9078128,0.2164066,0.0234374,0.7632812,0.902344,1.666113,1.220742");
-            Console.WriteLine("\n\nExpected Gesture: \t\tNO_BEND");
-            string received = Classify(new double[] { 0.064062, 0.1617188, 0.8421878, 0.0789064, 0.183594, 0.9078128, 0.2164066, 0.0234374, 0.7632812, 0.902344, 1.666113, 1.220742 });
-            if (received.Equals("NO_BEND"))
-                success++;
-            Console.WriteLine("Received Gesture: \t\t" + received);
-            Console.WriteLine((received.Equals("NO_BEND")) ? "\t\t\t\tSUCCESS" : "\t\t\t\tFAILURE");
+            DataTable GestureTable = new DataTable();
+            GestureTable.Columns.Add("GestureType", typeof(string));
+            GestureTable.Columns.Add("1X", typeof(double));
+            GestureTable.Columns.Add("1Y", typeof(double));
+            GestureTable.Columns.Add("1Z", typeof(double));
+            GestureTable.Columns.Add("2X", typeof(double));
+            GestureTable.Columns.Add("2Y", typeof(double));
+            GestureTable.Columns.Add("2Z", typeof(double));
+            GestureTable.Columns.Add("3X", typeof(double));
+            GestureTable.Columns.Add("3Y", typeof(double));
+            GestureTable.Columns.Add("3Z", typeof(double));
+            GestureTable.Columns.Add("4X", typeof(double));
+            GestureTable.Columns.Add("4Y", typeof(double));
+            GestureTable.Columns.Add("4Z", typeof(double));
 
+            foreach (Gesture g in Gestures)
+            {
+                Console.WriteLine(g.RawData.Count());
+                // oops need to seperate rows
+                foreach (var dataEntry in g.RawData)
+                {
+                    object[] dataArray = new object[1 + dataEntry.Count()];
+                    dataArray[0] = g.GestureType;
+                    dataEntry.ToArray().CopyTo(dataArray, 1);
+                    GestureTable.Rows.Add(dataArray);
+                }
+            }
 
-            Console.WriteLine("\n|----------------------------------------------------------|\n");
-
-
-            Console.WriteLine("Input values: \t 0.064, 0.163718, 0.8121878, 0.0799064, 0.183594, 0.9078128, 0.2364066, 0.0234374, 0.7632812, 0.902344, 1.666113, 1.220742");
-            Console.WriteLine("\nExpected Gesture: \t\tNO_BEND");
-            
-            received = Classify(new double[] { 0.064, 0.163718, 0.8121878, 0.0799064, 0.183594, 0.9078128, 0.2364066, 0.0234374, 0.7632812, 0.902344, 1.666113, 1.220742 });
-            
-            if (received.Equals("NO_BEND"))
-                success++;
-            Console.WriteLine("Received Gesture: \t\t" + received);
-            Console.WriteLine((received.Equals("NO_BEND")) ? "\t\t\t\tSUCCESS" : "\t\t\t\tFAILURE");
-
-
-            Console.WriteLine("\n|----------------------------------------------------------|\n");
-
-
-
-            // Should be classed as Slight Bend
-            Console.WriteLine("Input values: \t -0.071872, -0.401558, 0.7632814, -0.214056, 0.049219, 0.9476564, -0.20234, -0.574214, 0.4023438, 0.9493946, 1.695117, 1.344492");
-            Console.WriteLine("\n\nExpected Gesture: \t\tSLIGHT_BEND");
-            received = Classify(new double[] { -0.071872, -0.401558, 0.7632814, -0.214056, 0.049219, 0.9476564, -0.20234, -0.574214, 0.4023438, 0.9493946, 1.695117, 1.344492 });
-            if (received.Equals("SLIGHT_BEND"))
-                success++;
-            Console.WriteLine("Received Gesture: \t\t" + received);
-            Console.WriteLine((received.Equals("SLIGHT_BEND")) ? "\t\t\t\tSUCCESS" : "\t\t\t\tFAILURE");
+            TrainClassifier(GestureTable);
 
 
-            Console.WriteLine("\n|----------------------------------------------------------|\n");
 
-
-            Console.WriteLine("Input values: \t -0.096872, -0.48984, 0.784375, -0.227338, -0.189058, 0.9046876, -0.067184, -0.354682, 0.821094, 0.928125, 1.69834, 1.295508");
-            Console.WriteLine("\n\nExpected Gesture: \t\tSLIGHT_BEND");
-            received = Classify(new double[] { -0.096872, -0.48984, 0.784375, -0.227338, -0.189058, 0.9046876, -0.067184, -0.354682, 0.821094, 0.928125, 1.69834, 1.295508 });
-            if (received.Equals("SLIGHT_BEND"))
-                success++;
-            Console.WriteLine("Received Gesture: \t\t" + received);
-            Console.WriteLine((received.Equals("SLIGHT_BEND")) ? "\t\t\t\tSUCCESS" : "\t\t\t\tFAILURE");
-
-
-            Console.WriteLine("\n|----------------------------------------------------------|\n");
-
-
-            // Unknown - closer to Full Bend than anything else
-            Console.WriteLine("Input values: \t 0.0320334, -0.721088, -0.867182, -0.098434, -0.7039, 0.7093752, -0.25312, 0.446875, -0.992184, 1.468887, 1.672559, 1.224609");
-            Console.WriteLine("\n\nExpected Gesture: \t\tUNKNOWN_GESTURE");
-            received = Classify(new double[] { 0.0320334, -0.721088, -0.867182, -0.098434, -0.7039, 0.7093752, -0.25312, 0.446875, -0.992184, 1.468887, 1.672559, 1.224609 });
-            if (!received.Equals("SLIGHT_BEND") && !received.Equals("NO_BEND"))
-                success++;
-            Console.WriteLine("Received Gesture: \t\t" + received);
-            Console.WriteLine((received.Equals("SLIGHT_BEND")) ? "\t\t\t\tSUCCESS" : "\t\t\t\tFAILURE");
-
-            Console.WriteLine("\n|----------------------------------------------------------|\n");
-            Console.WriteLine("Testing finished:\t" + success + "\\5 successful classifications.");
-            */
-
-            string file = "NoBendContinuous.txt";
+            // TODO Replace this with read real time
+            string file = "GestureData\\NoBendContinuous.txt";
             StreamReader dataStream = new StreamReader(file);
-            string datasample;
+            string dataSample;
             int j = 0;
-            while ((datasample = dataStream.ReadLine()) != null)
+            while ((dataSample = dataStream.ReadLine()) != null)
             {
 
-                // datasample has the current line of text
-                string[] split = datasample.Split(new Char[] { ' ' });
+                // dataSample has the current line of text
+                string[] split = dataSample.Split(new Char[] { ' ' });
                 double[] splitDouble = new double[12];
 
                 for (int i = 0; i < split.Count(); i++)
@@ -188,27 +96,88 @@ namespace ProbabilityFunctions
                 System.Threading.Thread.Sleep(100);
             }
 
-            Console.Read();
+            Console.WriteLine("\n\n\nPress Enter to exit."); Console.Read();
         }
 
-        public void TrainClassifier(DataTable table)
+
+        /*
+         * Read the names of known gestures from file.
+         * These are used to then read the gestures's data from other files
+         */
+        public List<string> LoadGestureTypes()
         {
-            dataSet.Tables.Add(table);
+            List<string> gestures = new List<string>();
+
+            string file = "GestureData\\GestureTypes.txt";
+            StreamReader dataStream = new StreamReader(file);
+            string gesture;
+            while ((gesture = dataStream.ReadLine()) != null)
+            {
+                //Console.WriteLine(gesture);
+                gestures.Add(gesture);
+            }
+
+            return gestures;
+        }
+
+
+        /* 
+         * Creates the gestures for a given GestureType and returns the Gesture object
+         */
+        public Gesture LoadTrainingData(string gestureType)
+        {
+            List<List<double>> gestureRawData = new List<List<double>>();
+            string dataSample;
+            string gestureDataFile = "GestureData\\" + gestureType + ".txt";
+            StreamReader dataStream = new StreamReader(gestureDataFile);
+
+            int lineNumber = 0;
+            while ((dataSample = dataStream.ReadLine()) != null)
+            {
+                // dataSample has the current line of text. Values are separated by a space and must be split
+                string[] split = dataSample.Split(new Char[] { ' ' });
+                
+                // parse the split doubles and add to List
+                gestureRawData.Add(new List<double>());
+                for (int i = 0; i < split.Count(); i++)
+                {
+                    //Console.WriteLine(gestureType + " " + split[i]);
+                    double parsedValue = Double.Parse(split[i]);
+                    gestureRawData[lineNumber].Add(parsedValue);
+                    
+                }
+                lineNumber++;
+            }
+
+            return new Gesture(gestureRawData, gestureType);
+        }
+
+
+        // Takes Gesture data and makes DataTable for TrainClassifier()
+        public void constructTrainingData()
+        {
+            
+
+        }
+
+        public void TrainClassifier(DataTable GestureTable)
+        {
+            TrainedData.Tables.Add(GestureTable);
 
             //table
-            DataTable GaussianDistribution = dataSet.Tables.Add("Gaussian");
-            GaussianDistribution.Columns.Add(table.Columns[0].ColumnName);
+            DataTable GaussianDistribution = TrainedData.Tables.Add("Gaussian");
+            GaussianDistribution.Columns.Add(GestureTable.Columns[0].ColumnName);
 
             //columns
-            for (int i = 1; i < table.Columns.Count; i++)
+            for (int i = 1; i < GestureTable.Columns.Count; i++)
             {
-                GaussianDistribution.Columns.Add(table.Columns[i].ColumnName + "Mean");
-                GaussianDistribution.Columns.Add(table.Columns[i].ColumnName + "Variance");
+                GaussianDistribution.Columns.Add(GestureTable.Columns[i].ColumnName + "Mean");
+                GaussianDistribution.Columns.Add(GestureTable.Columns[i].ColumnName + "Variance");
             }
 
             //calc data
-            var results = (from myRow in table.AsEnumerable()
-                           group myRow by myRow.Field<string>(table.Columns[0].ColumnName) into g
+            var results = (from myRow in GestureTable.AsEnumerable()
+                           group myRow by myRow.Field<string>(GestureTable.Columns[0].ColumnName) into g
                            select new { Name = g.Key, Count = g.Count() }).ToList();
 
             for (int j = 0; j < results.Count; j++)
@@ -217,10 +186,10 @@ namespace ProbabilityFunctions
                 row[0] = results[j].Name;
 
                 int a = 1;
-                for (int i = 1; i < table.Columns.Count; i++)
+                for (int i = 1; i < GestureTable.Columns.Count; i++)
                 {
-                    row[a] = Helper.Mean(SelectRows(table, i, string.Format("{0} = '{1}'", table.Columns[0].ColumnName, results[j].Name)));
-                    row[++a] = Helper.Variance(SelectRows(table, i, string.Format("{0} = '{1}'", table.Columns[0].ColumnName, results[j].Name)));
+                    row[a] = Helper.Mean(SelectRows(GestureTable, i, string.Format("{0} = '{1}'", GestureTable.Columns[0].ColumnName, results[j].Name)));
+                    row[++a] = Helper.Variance(SelectRows(GestureTable, i, string.Format("{0} = '{1}'", GestureTable.Columns[0].ColumnName, results[j].Name)));
                     a++;
                 }
             }
@@ -231,18 +200,18 @@ namespace ProbabilityFunctions
             Dictionary<string, double> score = new Dictionary<string, double>();
 
 
-            var results = (from myRow in dataSet.Tables[0].AsEnumerable()
-                            group myRow by myRow.Field<string>(dataSet.Tables[0].Columns[0].ColumnName) into g
+            var results = (from myRow in TrainedData.Tables[0].AsEnumerable()
+                            group myRow by myRow.Field<string>(TrainedData.Tables[0].Columns[0].ColumnName) into g
                             select new { Name = g.Key, Count = g.Count() }).ToList();
 
             for (int i = 0; i < results.Count; i++)
             {
                 List<double> subScoreList = new List<double>();
                 int a = 1, b = 1;
-                for (int k = 1; k < dataSet.Tables["Gaussian"].Columns.Count; k = k + 2)
+                for (int k = 1; k < TrainedData.Tables["Gaussian"].Columns.Count; k = k + 2)
                 {
-                    double mean = Convert.ToDouble(dataSet.Tables["Gaussian"].Rows[i][a]);
-                    double variance = Convert.ToDouble(dataSet.Tables["Gaussian"].Rows[i][++a]);
+                    double mean = Convert.ToDouble(TrainedData.Tables["Gaussian"].Rows[i][a]);
+                    double variance = Convert.ToDouble(TrainedData.Tables["Gaussian"].Rows[i][++a]);
                     double result = Helper.NormalDist(obj[b - 1], mean, Helper.SquareRoot(variance));
                     subScoreList.Add(result);
                     a++; b++;
@@ -268,8 +237,9 @@ namespace ProbabilityFunctions
 
             double maxOne = score.Max(c => c.Value);
 
-            if (maxOne < 100)
-                return "None Found";
+            if (maxOne < RecognitionThreshold)
+                return "NO_GESTURE";
+
 
             var name = (from c in score
                         where c.Value == maxOne
@@ -278,9 +248,12 @@ namespace ProbabilityFunctions
             return name;
         }
 
+        // Helper function just takes a row and returns all values matching the filter as a list
         public IEnumerable<double> SelectRows(DataTable table, int column, string filter)
         {
             List<double> _doubleList = new List<double>();
+
+            // Return values matching the filter "GestureType = 'SOME_GESTURE'"
             DataRow[] rows = table.Select(filter);
             for (int i = 0; i < rows.Length; i++)
             {
@@ -290,9 +263,9 @@ namespace ProbabilityFunctions
             return _doubleList;
         }
 
-        public void Clear()
+        public void ClearTrainedData()
         {
-            dataSet = new DataSet();
+            TrainedData = new DataSet();
         }
     }
 }
