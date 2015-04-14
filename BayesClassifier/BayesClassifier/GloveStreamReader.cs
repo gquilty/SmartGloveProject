@@ -26,7 +26,7 @@ namespace GloveApplication
         {
             // Create a new SerialPort object with default settings.
             SerialPort _serialPort = new SerialPort();
-            string srtrBuildPort = "COM8";
+            string srtrBuildPort = "COM6";
             _serialPort.PortName = srtrBuildPort;
             _serialPort.BaudRate = 1000000;
             _serialPort.Parity = Parity.None;
@@ -50,21 +50,21 @@ namespace GloveApplication
 
             //char[] arrayOfInts = new char[iTOPVAL*5]
             char[] arrayOfInts = new char[iTOPVAL];
+           // StringBuilder sb = new StringBuilder();
+            string rawData = "";
 
             while (true)
             {
-                char chkStart = (char)_serialPort.ReadChar();
-                if (chkStart == '*')
+                char value = (char)_serialPort.ReadChar();
+                if (value != '*')
                 {
-                    for (int iIndex = 0; iIndex < iTOPVAL; iIndex++)
-                    { // iTopValue*5 <<< avgLayer1
-                        arrayOfInts[iIndex] = (char)_serialPort.ReadChar();
-                    }
-
-                    string str = new string(arrayOfInts);
-                    //Console.Write(str);
-
-                    buffer.run(str);
+                    rawData += value;
+                }
+                else
+                {
+                    Console.Write("GloveRaw String: " + rawData + "\n\n");
+                    buffer.run(rawData);
+                    rawData = "";
                 }
             }
         }

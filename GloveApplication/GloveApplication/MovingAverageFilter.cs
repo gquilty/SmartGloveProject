@@ -72,7 +72,7 @@ namespace GloveApplication
                     
                 }
 
-                //string avgData = "";
+                string avgData = "";
                 if (averagedData.Count() < 13)
                 {
                     //Uncomplete Data is useless in gesture system so its discarded
@@ -80,19 +80,19 @@ namespace GloveApplication
                 }
                 else
                 {
-                    /*
-                    for (int i = 0; i < averagedData.Count(); i++)
+                    
+                    for (int i = 1; i < averagedData.Count(); i++)
                     {
                         avgData += ((averagedData[i].ToString()) + ",");
                     }
-                    using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\Users\gavin\Desktop\development area\FYP\Holyshitballs.txt", true))
+                    using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\Users\gavin\Desktop\development area\FYP\GerardTestCaseBent.txt", true))
                     {
                         file.WriteLine(avgData);
                     }
-                    */
+                    
 
-                    DataSnapshot averagedSnapshot = new DataSnapshot(averagedData);
-                    sharedBuffer.run(averagedSnapshot);
+                   // DataSnapshot averagedSnapshot = new DataSnapshot(averagedData);
+                    //sharedBuffer.run(averagedSnapshot);
                 }
                 averagedData.Clear();
                 

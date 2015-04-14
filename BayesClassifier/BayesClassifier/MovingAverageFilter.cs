@@ -22,66 +22,84 @@ namespace GloveApplication
 
         public void movingAverage2(string data)
         {
-            string[] allData = data.ToString().Split('*');         
-            string[] currentData = allData[0].Split(',');
+            string[] currentData = data.Split(',');
+             
             List<string> input  = new List<string>(currentData);
-
-            if(lastValues.Count() <= 4)
+            Console.Write("Current Data Count: " + currentData.Count() + "\n\n");
+            Console.Write("Current Data: " + data + "\n\n");
+            if (currentData.Count() == 13)
             {
-                lastValues.Add(input);
-            }
-            else
-            {
-                lastValues.RemoveAt(0);
-                lastValues.Add(input);
-                try
+                /*
+                for (int i = 0; i < input.Count(); i++)
                 {
-                    averagedData.Add(double.Parse(lastValues[4][0]));
+                    Console.Write(input[i] + "\n");
                 }
-                catch (Exception ex)
-                {
-                    return;
-                }
-                for (int j = 1; j < lastValues[0].Count(); j++)
-                {
-                    double value1 = 0;
-                    double value2 = 0;
-                    double value3 = 0;
-                    double value4 = 0;
-                    double value5 = 0;
-                    try
-                    {
-                        value1 = double.Parse(lastValues[0][j]);
-                        value2 = double.Parse(lastValues[1][j]);
-                        value3 = double.Parse(lastValues[2][j]);
-                        value4 = double.Parse(lastValues[3][j]);
+                 * */
 
-                        value5 = double.Parse(lastValues[4][j]);
-                   
-
-                        double averagedValues = (value1 + value2 + value3 + value4 + value5) / 5;
-                        double normalisedValue = (2 * (averagedValues + 1.5) / 4.5) - 1.0;
-                        double truncatedValue = (Math.Truncate(averagedValues * 1000.0) / 1000.0);
-                        averagedData.Add(truncatedValue);
-                    }
-                    catch (Exception ex)
-                    {
-                        averagedData.Clear();
-                        return;
-                    }
-                    
-                }
-
-                string averagedSnapshot = "";
-                if (averagedData.Count() < 13)
+                if (lastValues.Count() <= 4)
                 {
-                    //Uncomplete Data is useless in gesture system so its discarded
-                    //This may leave gaps in the system but with large throughput it tends to be neglagible
+                    lastValues.Add(input);
                 }
                 else
                 {
-                    
-                    for (int i = 0; i < averagedData.Count(); i++)
+                    lastValues.RemoveAt(0);
+                    lastValues.Add(input);
+                    try
+                    {
+                        averagedData.Add(double.Parse(lastValues[4][0]));
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.Write("Time Parse Error \n");
+                        return;
+                    }
+                    for (int j = 1; j < 13; j++)
+                    {
+                        double value1;
+                        double value2;
+                        double value3;
+                        double value4;
+                        double value5;
+                        try
+                        {
+
+                            value1 = double.Parse(lastValues[0][j]);
+
+                            value2 = double.Parse(lastValues[1][j]);
+
+                            value3 = double.Parse(lastValues[2][j]);
+
+                            value4 = double.Parse(lastValues[3][j]);
+
+                            value5 = double.Parse(lastValues[4][j]);
+
+
+
+                            double averagedValues = (value1 + value2 + value3 + value4 + value5) / 5;
+                            double normalisedValue = (2 * (averagedValues + 1.5) / 4.5) - 1.0;
+                            double truncatedValue = (Math.Truncate(normalisedValue * 1000.0) / 1000.0);
+                            averagedData.Add(truncatedValue);
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.Write("Value Parse error \n");
+                            /*
+                            Console.Write("ERROR: Value1-" + j + ": " + lastValues[0][j] + "\n");
+                            Console.Write("ERROR: Value2 " + j + ": " + lastValues[1][j] + "\n");
+                            Console.Write("ERROR: Value3 " + j + ": " + lastValues[2][j] + "\n");
+                            Console.Write("ERROR: Value4 " + j + ": " + lastValues[3][j] + "\n");
+                            Console.Write("ERROR: Value5 " + j + ": " + lastValues[4][j] + "\n\n");
+                             */
+                            averagedData.Clear();
+                            return;
+                        }
+
+                    }
+
+
+                    string averagedSnapshot = "";
+
+                    for (int i = 1; i < averagedData.Count(); i++)
                     {
                         if (i == averagedData.Count() - 1)
                         {
@@ -92,20 +110,20 @@ namespace GloveApplication
                             averagedSnapshot += ((averagedData[i].ToString()) + ",");
                         }
                     }
-                    /*
-                    using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\Users\gavin\Desktop\development area\FYP\output.txt", true))
-                    {
-                        file.WriteLine(avgData);
-                    }
-                    */
+                    Console.Write("This is the averaged data: " + averagedSnapshot + "\n\n");
+                   // using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\Users\gavin\Desktop\development area\FYP\ReadGloveFix.txt", true))
+                    //{
+                   //     file.WriteLine(averagedSnapshot);
+                   // }
 
-                   // DataSnapshot averagedSnapshot = new DataSnapshot(averagedData);
+
+                    // DataSnapshot averagedSnapshot = new DataSnapshot(averagedData);
 
                     sharedBuffer.run(averagedSnapshot);
+                    averagedData.Clear();
+
                 }
-                averagedData.Clear();
-                
-             }
+            }
         }
     }
 }

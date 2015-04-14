@@ -4,3 +4,9 @@ C:\Users\gavin\Documents\Semester4\GamesDevWorkspace\GloveApplication\GloveAppli
 C:\Users\gavin\Documents\Semester4\GamesDevWorkspace\GloveApplication\GloveApplication\obj\x86\Debug\GloveApplication.csprojResolveAssemblyReference.cache
 C:\Users\gavin\Documents\Semester4\GamesDevWorkspace\GloveApplication\GloveApplication\obj\x86\Debug\GloveApplication.exe
 C:\Users\gavin\Documents\Semester4\GamesDevWorkspace\GloveApplication\GloveApplication\obj\x86\Debug\GloveApplication.pdb
+C:\Users\gavin\Desktop\development area\FYP\SmartGloveProject\GloveApplication\GloveApplication\obj\x86\Debug\GloveApplication.exe
+C:\Users\gavin\Desktop\development area\FYP\SmartGloveProject\GloveApplication\GloveApplication\obj\x86\Debug\GloveApplication.pdb
+C:\Users\gavin\Desktop\development area\FYP\SmartGloveProject\GloveApplication\GloveApplication\obj\x86\Debug\GloveApplication.csprojResolveAssemblyReference.cache
+C:\Users\gavin\Desktop\development area\FYP\SmartGloveProject\GloveApplication\GloveApplication\bin\Debug\GloveApplication.exe
+C:\Users\gavin\Desktop\development area\FYP\SmartGloveProject\GloveApplication\GloveApplication\bin\Debug\GloveApplication.pdb
+C:\Users\gavin\Desktop\development area\FYP\SmartGloveProject\GloveApplication\GloveApplication\bin\Debug\Disruptor.dll

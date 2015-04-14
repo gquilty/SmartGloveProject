@@ -5,7 +5,7 @@ using System.Text;
 
 namespace GloveApplication
 {
-    class DataSnapshot
+    public class DataSnapshot
     {
         public List<double> gloveData;
 

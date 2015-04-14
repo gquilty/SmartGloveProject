@@ -20,3 +20,13 @@ D:\College\Project\Git\SmartGloveProject\SmartGloveProject\BayesClassifier\Bayes
 D:\College\Project\Git\SmartGloveProject\SmartGloveProject\BayesClassifier\BayesClassifier\bin\Debug\MetroFramework.Fonts.dll
 D:\College\Project\Git\SmartGloveProject\SmartGloveProject\BayesClassifier\BayesClassifier\obj\Debug\BayesClassifier.exe
 D:\College\Project\Git\SmartGloveProject\SmartGloveProject\BayesClassifier\BayesClassifier\obj\Debug\BayesClassifier.pdb
+C:\Users\gavin\Desktop\development area\FYP\SmartGloveProject\BayesClassifier\BayesClassifier\bin\Debug\BayesClassifier.exe.config
+C:\Users\gavin\Desktop\development area\FYP\SmartGloveProject\BayesClassifier\BayesClassifier\bin\Debug\BayesClassifier.exe
+C:\Users\gavin\Desktop\development area\FYP\SmartGloveProject\BayesClassifier\BayesClassifier\bin\Debug\BayesClassifier.pdb
+C:\Users\gavin\Desktop\development area\FYP\SmartGloveProject\BayesClassifier\BayesClassifier\bin\Debug\Disruptor.dll
+C:\Users\gavin\Desktop\development area\FYP\SmartGloveProject\BayesClassifier\BayesClassifier\bin\Debug\MetroFramework.Design.dll
+C:\Users\gavin\Desktop\development area\FYP\SmartGloveProject\BayesClassifier\BayesClassifier\bin\Debug\MetroFramework.dll
+C:\Users\gavin\Desktop\development area\FYP\SmartGloveProject\BayesClassifier\BayesClassifier\bin\Debug\MetroFramework.Fonts.dll
+C:\Users\gavin\Desktop\development area\FYP\SmartGloveProject\BayesClassifier\BayesClassifier\obj\Debug\BayesClassifier.csprojResolveAssemblyReference.cache
+C:\Users\gavin\Desktop\development area\FYP\SmartGloveProject\BayesClassifier\BayesClassifier\obj\Debug\BayesClassifier.exe
+C:\Users\gavin\Desktop\development area\FYP\SmartGloveProject\BayesClassifier\BayesClassifier\obj\Debug\BayesClassifier.pdb
