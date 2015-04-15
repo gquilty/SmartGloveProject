@@ -46,6 +46,7 @@ namespace GloveApplication
 
                 ringBuffer.Publish(sequenceNo);
 
+                //Debugging
                 //Console.WriteLine("Published entry {0}, value {1}", sequenceNo, entry.Value);
 
                 Thread.Sleep(250);

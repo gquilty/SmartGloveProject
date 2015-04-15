@@ -12,6 +12,12 @@ namespace BayesClassifier
     public class Classifier
     {
         private DataSet TrainedData;
+
+        public DataSet trainedData
+        {
+            get { return TrainedData; }
+            set { TrainedData = value; }
+        }
         private List<Gesture> Gestures;
         private List<string> GestureTypes;
 
@@ -23,7 +29,7 @@ namespace BayesClassifier
             Gestures = new List<Gesture>();
             GestureTypes = LoadGestureTypes();
 
-            RecognitionThreshold = 0.001;
+            RecognitionThreshold = 100;
         }
 
         public void run()
@@ -37,7 +43,7 @@ namespace BayesClassifier
             }
 
             DataTable GestureTable = new DataTable();
-            GestureTable.Columns.Add("GestureType", typeof(string));
+            GestureTable.Columns.Add("GestureType");
             GestureTable.Columns.Add("1X", typeof(double));
             GestureTable.Columns.Add("1Y", typeof(double));
             GestureTable.Columns.Add("1Z", typeof(double));
@@ -97,21 +103,20 @@ namespace BayesClassifier
             
             string[] split = dataSample.Split(new Char[] { ',' });
             
-            double[] splitDouble = new double[13];
+            double[] splitDouble = new double[12];
 
             for (int i = 0; i < split.Count(); i++)
             {
-                // Skip the time variable
-                if (i == 0)
-                {
-                    continue;
-                }
-                
+               // if (i == 0) continue;
+
                 splitDouble[i] = Double.Parse(split[i]);
+
+                //Console.Write(splitDouble[i] + " ");
             }
+            //Console.WriteLine("");
 
             string detectedGesture = Classify(splitDouble);
-            Console.WriteLine("Received:\t" + detectedGesture);
+            //Console.WriteLine("\n\nReceived:\t" + detectedGesture);
         }
 
 
@@ -149,13 +154,12 @@ namespace BayesClassifier
             while ((dataSample = dataStream.ReadLine()) != null)
             {
                 // dataSample has the current line of text. Values are separated by a space and must be split
-                string[] split = dataSample.Split(new Char[] { ' ' });
+                string[] split = dataSample.Split(new Char[] { ',' });
                 
                 // parse the split doubles and add to List
                 gestureRawData.Add(new List<double>());
                 for (int i = 0; i < split.Count(); i++)
                 {
-                    //Console.WriteLine(gestureType + " " + split[i]);
                     double parsedValue = Double.Parse(split[i]);
                     gestureRawData[lineNumber].Add(parsedValue);
                     
@@ -190,6 +194,8 @@ namespace BayesClassifier
             }
 
             //calc data
+            //get stuff from tables SQL-esq
+
             var results = (from myRow in GestureTable.AsEnumerable()
                            group myRow by myRow.Field<string>(GestureTable.Columns[0].ColumnName) into g
                            select new { Name = g.Key, Count = g.Count() }).ToList();
@@ -228,8 +234,11 @@ namespace BayesClassifier
                 for (int k = 1; k < TrainedData.Tables["Gaussian"].Columns.Count; k = k + 2)
                 {
                     double mean = Convert.ToDouble(TrainedData.Tables["Gaussian"].Rows[i][a]);
+                    //Console.WriteLine("Mean Value: " + mean + "\n");
                     double variance = Convert.ToDouble(TrainedData.Tables["Gaussian"].Rows[i][++a]);
+                    //Console.WriteLine("Variance Value: " + variance + "\n");
                     double result = Helper.NormalDist(obj[b - 1], mean, Helper.SquareRoot(variance));
+                   // Console.WriteLine("Result Value: " + result + "\n");
                     subScoreList.Add(result);
                     a++; b++;
                 }
@@ -239,6 +248,7 @@ namespace BayesClassifier
                 {
                     if (finalScore == 0)
                     {
+                        Console.WriteLine("sub score " + subScoreList[z]);
                         finalScore = subScoreList[z];
                         continue;
                     }
@@ -246,7 +256,7 @@ namespace BayesClassifier
                     finalScore = finalScore * subScoreList[z];
                 }
 
-                score.Add(results[i].Name, finalScore * 0.5);
+                score.Add(results[i].Name, finalScore*0.5);
 
                 // writes the gesture names and their probability score to screen
                 Console.WriteLine(j++ + ": " + results[i].Name + " \t" + score[results[i].Name]);
