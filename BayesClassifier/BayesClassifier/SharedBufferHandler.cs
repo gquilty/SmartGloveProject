@@ -22,7 +22,7 @@ namespace GloveApplication
 
         public void OnNext(SharedBufferValue data, long sequence, bool endOfBatch)
         {
-            classifier.handleBufferEntry(data.Value);
+           // classifier.handleBufferEntry(data.Value);
         }
     }
 }

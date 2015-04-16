@@ -28,7 +28,7 @@ namespace GloveApplication
 
             SharedBufferHandler sbh = new SharedBufferHandler();
             sbh.classifier = new Classifier();
-            sbh.classifier.run();
+            //sbh.classifier.run();
             disruptor.HandleEventsWith(sbh);
             ringBuffer = disruptor.Start();
         }

@@ -12,8 +12,11 @@ using System.Globalization;
 using Disruptor;
 using Disruptor.Dsl;
 
+using BayesClassifier;
+
 namespace GloveApplication
 {
+
     /// <summary>
     /// The MovingAverageFilter class is used to filter the raw output to a more readible form
     /// by removing noise and calibrating to a set standard
@@ -22,7 +25,8 @@ namespace GloveApplication
     {
         List<List<string>> lastValues = new List<List<string>>();
         List<double> averagedData = new List<double>();
-        SharedBuffer sharedBuffer = new SharedBuffer();
+        //SharedBuffer sharedBuffer = new SharedBuffer();
+        Classifier classifier = new Classifier();
 
         /// <summary>
         /// The movingAverage() method takes in data from the glove and performs a simple moving average on this data 
@@ -46,8 +50,6 @@ namespace GloveApplication
                     Console.Write(input[i] + "\n");
                 }
                  * */
-
-                /*
 
                 if (lastValues.Count() <= 4)
                 {
@@ -89,10 +91,10 @@ namespace GloveApplication
 
 
                             double averagedValues = (value1 + value2 + value3 + value4 + value5) / 5;
-                            //double normalisedValue = (2 * (averagedValues + 1.5) / 4.5) - 1.0;
-                            //double truncatedValue = (Math.Truncate(normalisedValue * 1000.0) / 1000.0);
-                           // averagedData.Add(truncatedValue);
-                            averagedData.Add(averagedValues);
+                            double normalisedValue = (100 * (averagedValues + 1.5) / 4.5);
+                            double truncatedValue = (Math.Truncate(normalisedValue * 1000.0) / 1000.0);
+                            averagedData.Add(truncatedValue);
+                            //averagedData.Add(averagedValues);
 
                         }
                         catch (Exception ex)
@@ -105,6 +107,7 @@ namespace GloveApplication
                             Console.Write("ERROR: Value3 " + j + ": " + lastValues[2][j] + "\n");
                             Console.Write("ERROR: Value4 " + j + ": " + lastValues[3][j] + "\n");
                             Console.Write("ERROR: Value5 " + j + ": " + lastValues[4][j] + "\n\n");
+                             * */
                              
                             averagedData.Clear();
                             return;
@@ -128,50 +131,53 @@ namespace GloveApplication
                     }
                     //Debugging
                     //Console.Write("This is the averaged data: " + averagedSnapshot + "\n\n");
-                    /*using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\Users\gavin\Desktop\development area\FYP\TrainingData\TestingRest2.txt", true))
-                    {
-                        file.WriteLine(averagedSnapshot);
-                    }*/
+                   // using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\Users\gavin\Desktop\development area\FYP\PleaseWorkBend.txt", true))
+                   // {
+                   //     file.WriteLine(averagedSnapshot);
+                   // }
 
                 
                     // DataSnapshot averagedSnapshot = new DataSnapshot(averagedData);
 
-                    string averagedSnapshot = "";
+                    //string averagedSnapshot = "";
 
-                    for (int i = 1; i < 13; i++)
-                    {
-                        try
-                        {
-                            double rawValue = Double.Parse(input[i]);
-                            averagedData.Add(rawValue);
-                        }catch(Exception ex)
-                        {
-                            //ParseError
-                            averagedData.Clear();
-                            return;
-                        }
+                    //for (int i = 1; i < 13; i++)
+                    //{
+                    //    try
+                    //    {
+                    //        double rawValue = Double.Parse(input[i]);
+                    //        averagedData.Add(rawValue);
+                    //    }catch(Exception ex)
+                    //    {
+                    //        //ParseError
+                    //        averagedData.Clear();
+                    //        return;
+                    //    }
                         
-                    }
+                    //}
 
-                    for (int i = 0; i < averagedData.Count(); i++)
-                    {
-                        if (i == averagedData.Count() - 1)
-                        {
-                            averagedSnapshot += ((averagedData[i].ToString()));
-                        }
-                        else
-                        {
-                            averagedSnapshot += ((averagedData[i].ToString()) + ",");
-                        }
-                    }
+                    //for (int i = 0; i < averagedData.Count(); i++)
+                    //{
+                    //    if (i == averagedData.Count() - 1)
+                    //    {
+                    //        averagedSnapshot += ((averagedData[i].ToString()));
+                    //    }
+                    //    else
+                    //    {
+                    //        averagedSnapshot += ((averagedData[i].ToString()) + ",");
+                    //    }
+                    //}
                     
-                    /*using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\Users\gavin\Desktop\development area\FYP\TrainingData\RawDataTestBend.txt", true))
-                    {
-                        file.WriteLine(averagedSnapshot);
-                    }*/
+                    ///*using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\Users\gavin\Desktop\development area\FYP\TrainingData\RawDataTestBend.txt", true))
+                    //{
+                    //    file.WriteLine(averagedSnapshot);
+                    //}*/
                     
 
-                    sharedBuffer.run(averagedSnapshot);
+                    //sharedBuffer.run(averagedSnapshot);
+
+                    classifier.Classify(averagedData.ToArray());
+
 
                     averagedData.Clear();
 
@@ -179,4 +185,4 @@ namespace GloveApplication
             }
         }
     }
-//}
+}
