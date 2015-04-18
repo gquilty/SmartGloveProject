@@ -58,9 +58,19 @@ namespace GloveApplication
             while (true)
             {
                 //Read each character untill an '*' is detected
-                string value = _serialPort.ReadLine();
-                buffer.run(value);
-                value = "";
+
+                try
+                {
+                    string value = _serialPort.ReadLine();
+                    buffer.run(value);
+                    value = "";
+                }
+                catch (Exception ReadTimeoutExceptiom)
+                {
+                    Console.WriteLine("Timeout occured on Serial COM port.\t Trying again");
+                    _serialPort.Close();
+                    _serialPort.Open();
+                }
                 
             }
         }

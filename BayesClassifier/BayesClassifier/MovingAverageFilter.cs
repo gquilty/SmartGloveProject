@@ -113,7 +113,7 @@ namespace GloveApplication
                         }
                     }
                     
-                    /*using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\Users\Ger\Desktop\FULL_BEND.txt", true))
+                    /*using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\Users\Ger\Desktop\NO_BEND.txt", true))
                     {
                         Console.WriteLine("Writing to file\t" + averagedSnapshot);
                         file.WriteLine(averagedSnapshot);

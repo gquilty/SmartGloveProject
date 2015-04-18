@@ -18,7 +18,7 @@ namespace GloveApplication
 {
     class SharedBuffer
     {
-        private static readonly int _ringSize = 1 << 11;  // Must be multiple of 2
+        private static readonly int _ringSize = 1 << 3;  // Must be multiple of 2
         private Disruptor.Dsl.Disruptor<SharedBufferValue> disruptor;
         private RingBuffer<SharedBufferValue> ringBuffer;
 

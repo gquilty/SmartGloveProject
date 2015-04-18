@@ -28,10 +28,6 @@ namespace EuclidianDistanceClassifier
 
             return distance;
             //return SquareRoot(distance);
-
-            //return x.Zip(y, (a, b) => (a - b) * (a - b)).Sum();
-
-
         }
 
 

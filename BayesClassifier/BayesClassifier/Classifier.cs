@@ -13,13 +13,7 @@ namespace EuclidianDistanceClassifier
     
     public class Classifier
     {
-        private DataSet TrainedData;
-
-        public DataSet trainedData
-        {
-            get { return TrainedData; }
-            set { TrainedData = value; }
-        }
+        
         private List<Gesture> KnownGestures;
         private List<string> GestureTypes;
 
@@ -27,14 +21,13 @@ namespace EuclidianDistanceClassifier
 
         public Classifier()
         {
-            TrainedData = new DataSet();
             KnownGestures = new List<Gesture>();
 
             Console.Write("\nLoading gesture types...");
             GestureTypes = LoadGestureTypes();
             Console.WriteLine("done.\n");
 
-            DistanceThreshold = 80;
+            DistanceThreshold = 100;
 
         }
 
@@ -64,7 +57,7 @@ namespace EuclidianDistanceClassifier
             List<double> splitDouble = new List<double>();
 
             string binnedData = "";
-            for (int i = 0; i < split.Count(); i++)
+            for (int i = 0; i < split.Count()-6; i++)
             {
                 //double parsedDouble = Double.Parse(split[i]);
                 int parsedValue = ((int)Double.Parse(split[i]) / 3) + 1;
@@ -78,7 +71,6 @@ namespace EuclidianDistanceClassifier
             System.Threading.Thread.Sleep(100);
            
         }
-         
 
 
         /*
@@ -121,7 +113,7 @@ namespace EuclidianDistanceClassifier
 
                 // parse the split doubles and add to List
                 gestureRawData.Add(new List<double>());
-                for (int i = 0; i < split.Count(); i++)
+                for (int i = 0; i < split.Count() - 6; i++)
                 {
                     //double parsedValue = Double.Parse(split[i]);
                     int parsedValue = ((int)Double.Parse(split[i]) / 3) + 1;
