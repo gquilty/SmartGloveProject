@@ -1,0 +1,10 @@
+D:\College\Project\Git\EuclidianDistanceClassifier\BayesClassifier\obj\Debug\EuclidianDistanceClassifier.csprojResolveAssemblyReference.cache
+D:\College\Project\Git\EuclidianDistanceClassifier\BayesClassifier\obj\Debug\BayesClassifier.exe
+D:\College\Project\Git\EuclidianDistanceClassifier\BayesClassifier\bin\Debug\BayesClassifier.exe.config
+D:\College\Project\Git\EuclidianDistanceClassifier\BayesClassifier\bin\Debug\BayesClassifier.exe
+D:\College\Project\Git\EuclidianDistanceClassifier\BayesClassifier\bin\Debug\BayesClassifier.pdb
+D:\College\Project\Git\EuclidianDistanceClassifier\BayesClassifier\bin\Debug\Disruptor.dll
+D:\College\Project\Git\EuclidianDistanceClassifier\BayesClassifier\bin\Debug\MetroFramework.Design.dll
+D:\College\Project\Git\EuclidianDistanceClassifier\BayesClassifier\bin\Debug\MetroFramework.dll
+D:\College\Project\Git\EuclidianDistanceClassifier\BayesClassifier\bin\Debug\MetroFramework.Fonts.dll
+D:\College\Project\Git\EuclidianDistanceClassifier\BayesClassifier\obj\Debug\BayesClassifier.pdb

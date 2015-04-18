@@ -54,23 +54,14 @@ namespace GloveApplication
                 _serialPort.Open();
             }
 
-            string rawData = "";
 
             while (true)
             {
                 //Read each character untill an '*' is detected
-                char value = (char)_serialPort.ReadChar();
-                if (value != '*')
-                {
-                    rawData += value;
-                }
-                else
-                {
-                    //Debugging
-                    //Console.Write("GloveRaw String: " + rawData + "\n\n");
-                    buffer.run(rawData);
-                    rawData = "";
-                }
+                string value = _serialPort.ReadLine();
+                buffer.run(value);
+                value = "";
+                
             }
         }
     }

@@ -12,7 +12,7 @@ using System.Globalization;
 using Disruptor;
 using Disruptor.Dsl;
 
-using BayesClassifier;
+using EuclidianDistanceClassifier;
 
 namespace GloveApplication
 {
@@ -28,7 +28,7 @@ namespace GloveApplication
 
             SharedBufferHandler sbh = new SharedBufferHandler();
             sbh.classifier = new Classifier();
-            //sbh.classifier.run();
+            sbh.classifier.run();
             disruptor.HandleEventsWith(sbh);
             ringBuffer = disruptor.Start();
         }
@@ -48,9 +48,6 @@ namespace GloveApplication
 
                 //Debugging
                 //Console.WriteLine("Published entry {0}, value {1}", sequenceNo, entry.Value);
-
-                Thread.Sleep(250);
-
                 break;
 
             }

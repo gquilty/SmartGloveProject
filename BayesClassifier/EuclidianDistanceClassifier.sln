@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BayesClassifier", "BayesClassifier\BayesClassifier.csproj", "{5F5F4FE2-3630-4A85-AAD6-455B17309A24}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EuclidianDistanceClassifier", "BayesClassifier\EuclidianDistanceClassifier.csproj", "{5F5F4FE2-3630-4A85-AAD6-455B17309A24}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
