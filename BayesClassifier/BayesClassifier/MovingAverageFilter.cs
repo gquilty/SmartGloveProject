@@ -25,8 +25,7 @@ namespace GloveApplication
     {
         private List<List<string>> lastValues = new List<List<string>>();
         private List<double> averagedData = new List<double>();
-        private SharedBuffer sharedBuffer = new SharedBuffer();
-        public Classifier classifier = new Classifier();
+        public SharedBuffer sharedBuffer = new SharedBuffer();
 
         /// <summary>
         /// The movingAverage() method takes in data from the glove and performs a simple moving average on this data 

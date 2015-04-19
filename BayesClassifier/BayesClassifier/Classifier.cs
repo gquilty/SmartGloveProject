@@ -15,16 +15,23 @@ namespace EuclidianDistanceClassifier
     
     public class Classifier
     {
-        public MetroForm gui;
+        public MainWindow gui;
         
         public List<Gesture> KnownGestures;
         private Dictionary<string, int> GestureTypes;
 
-        private double DistanceThreshold;
+        private int BinningBoundary;
+        private int LaplacianSmoothingFactor;
 
         public Classifier()
         {
             KnownGestures = new List<Gesture>();
+            BinningBoundary = 3;
+            LaplacianSmoothingFactor = 1;
+        }
+
+        public void Setup()
+        {
 
             // Debug
             Console.Write("\nLoading gesture types...");
@@ -32,12 +39,6 @@ namespace EuclidianDistanceClassifier
             Console.WriteLine("done.\n");
             //
 
-            DistanceThreshold = 100;
-
-        }
-
-        public void run()
-        {
             // Instantiate a Gesture object for each type of known gesture
             Console.Write("\nPopulating Gestures...");
             int numGestures = 0;
@@ -51,7 +52,6 @@ namespace EuclidianDistanceClassifier
                 }
 
                 newGesture.calculateAverageData();
-                newGesture.WriteXML();
                 KnownGestures.Add(newGesture);
                 numGestures++;
             }
@@ -68,24 +68,20 @@ namespace EuclidianDistanceClassifier
             string[] splitData = dataSample.Split(',');
             List<double> parsedData = new List<double>();
 
-            // Debug
-            string DebugBinnedData = "";
-            //
+            // This is for printing only, to show the data for the demo.
+            string binnedSnapshotValues = "";
+
             for (int i = 0; i < splitData.Count() - 6; i++)
             {
-                //double parsedDouble = Double.Parse(split[i]);
-                int parsedValue = ((int)Double.Parse(splitData[i]) / 3) + 1;
+                int parsedValue = BinValue(splitData[i]);
                 parsedData.Add(parsedValue);
 
-                // Debug
-                DebugBinnedData += parsedValue + " ";
-                //
+                binnedSnapshotValues += " " + parsedValue;
             }
 
             string received = Classify(parsedData);
             // Debugging
-            Console.WriteLine(DebugBinnedData + "\n\t" + received);
-            //System.Threading.Thread.Sleep(100);
+            Console.WriteLine(binnedSnapshotValues + "\n\t" + received);
             //
         }
 
@@ -98,15 +94,17 @@ namespace EuclidianDistanceClassifier
         {
             Dictionary<string, int> gestures = new Dictionary<string, int>();
 
-            gestures.Add("NO_GESTURE", 0);
-
             string file = "GestureData\\GestureTypes.dat";
             StreamReader dataStream = new StreamReader(file);
             string gesture;
-            int value = 1;
+
+            int value = 0;
+            gestures.Add("NO_GESTURE", value);
+            value++;
             while ((gesture = dataStream.ReadLine()) != null)
             {
                 gestures.Add(gesture, value);
+                value++;
             }
 
             return gestures;
@@ -129,36 +127,36 @@ namespace EuclidianDistanceClassifier
             string dataSample;
             string gestureDataFile = "GestureData\\" + gestureType + ".dat";
             StreamReader dataStream = new StreamReader(gestureDataFile);
-
-            // Debug
-            string binnedData = "\n";
-            //
+                        
             int lineNumber = 0;
             while ((dataSample = dataStream.ReadLine()) != null)
             {
                 // dataSample has the current line of text. Values are separated by a space and must be split
-                string[] split = dataSample.Split(',');
+                string[] splitData = dataSample.Split(',');
 
                 // parse the split doubles and add to List
                 gestureRawData.Add(new List<double>());
-                for (int i = 0; i < split.Count() - 6; i++)
+
+                // This is for printing only, to show the data for the demo.
+                string binnedTrainingValues = "";
+                for (int i = 0; i < splitData.Count() - 6; i++)
                 {
-                    //double parsedValue = Double.Parse(split[i]);
-                    int parsedValue = ((int)Double.Parse(split[i]) / 3) + 1;
+                    int parsedValue = BinValue(splitData[i]);
+                    binnedTrainingValues += " " + parsedValue;
                     gestureRawData[lineNumber].Add(parsedValue);
 
-                    // Debug
-                    binnedData += parsedValue + " ";
-                    //
                 }
                 lineNumber++;
+
+                Console.WriteLine(binnedTrainingValues);
             }
 
-            // Debug
-            Console.WriteLine(binnedData);
-            //
-
             return new Gesture(gestureRawData, gestureType);
+        }
+
+        public int BinValue(string value)
+        {
+            return ((int)Double.Parse(value) / BinningBoundary) + LaplacianSmoothingFactor;
         }
 
 
@@ -188,21 +186,13 @@ namespace EuclidianDistanceClassifier
                 }
             }
 
-            // Is it smaller than the recognition threshold?
-            // DIstanceThreshold is squared to compensate for the lack of Square Root in the Euclidian Distance function (saves processing)
-            if (lowestDistance > DistanceThreshold*DistanceThreshold)
-            {
-                return "NO_GESTURE";
-            }
-
-            // Debug
-            //Console.WriteLine("Dist:\t" + lowestDistance);
-            //
-
+            // Get string value for the gesture with the lowest distance
             recognisedGesture = (from c in gestureDistances
                                  where c.Value == lowestDistance
                                  select c.Key).First();
 
+            
+            gui.SetImage( GestureTypes[recognisedGesture] );
             
             return recognisedGesture;
         }

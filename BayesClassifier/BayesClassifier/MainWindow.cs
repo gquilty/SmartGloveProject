@@ -29,34 +29,49 @@ namespace EuclidianDistanceClassifier
 
         public void StartGlove(int comPort)
         {
+            // GloveStreamReader creates all necessary objects in the system sequentially
             glove = new GloveStreamReader();
-            classifierRef = glove.buffer.dch.avgLayer.classifier;
+            classifierRef = glove.buffer.dch.avgLayer.sharedBuffer.sbh.classifier;
             classifierRef.gui = this;
 
             glove.readData(comPort);            
         }
 
-        public void setImage(int gestureType)
+        public void SetImage(int gestureType)
         {
-
-            switch (gestureType)
+            try
             {
-
-
-
+                switch (gestureType)
+                {
+                    case 1:
+                        gestureImage.Image = Flat;
+                        gestureLabel.Invoke((MethodInvoker)(() => gestureLabel.Text = "No Bend"));
+                        break;
+                    case 2:
+                        gestureImage.Image = ThumbsUp;
+                        gestureLabel.Invoke((MethodInvoker)(() => gestureLabel.Text = "Thumbs Up"));
+                        break;
+                    case 3:
+                        gestureImage.Image = PeaceSign;
+                        gestureLabel.Invoke((MethodInvoker)(() => gestureLabel.Text = "Peace Sign"));
+                        break;
+                }
             }
-
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void startBtn_Click(object sender, EventArgs e)
         {
-            int comPort = (int)Double.Parse(metroTextBox1.Text);
+            int comPort = (int)Double.Parse(comPortTextBox.Text);
             StartGlove(comPort);
         }
 
-        private void metroTextBox1_Click(object sender, EventArgs e)
+        private void comPortTextBox_Click(object sender, EventArgs e)
         {
-            metroTextBox1.Text = "";
+            comPortTextBox.Text = "";
         }
     }
 }

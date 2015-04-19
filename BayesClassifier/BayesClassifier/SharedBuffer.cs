@@ -16,19 +16,25 @@ using EuclidianDistanceClassifier;
 
 namespace GloveApplication
 {
-    class SharedBuffer
+    public class SharedBuffer
     {
         private static readonly int _ringSize = 1 << 4;  // Must be multiple of 2
         private Disruptor.Dsl.Disruptor<SharedBufferValue> disruptor;
         private RingBuffer<SharedBufferValue> ringBuffer;
+        public SharedBufferHandler sbh;
 
         public SharedBuffer()
         {
             disruptor = new Disruptor.Dsl.Disruptor<SharedBufferValue>(() => new SharedBufferValue(), _ringSize, TaskScheduler.Default);
 
-            SharedBufferHandler sbh = new SharedBufferHandler();
+            sbh = new SharedBufferHandler();
+            this.Setup();
+        }
+
+        private void Setup()
+        {
             sbh.classifier = new Classifier();
-            sbh.classifier.run();
+            sbh.classifier.Setup();
             disruptor.HandleEventsWith(sbh);
             ringBuffer = disruptor.Start();
         }

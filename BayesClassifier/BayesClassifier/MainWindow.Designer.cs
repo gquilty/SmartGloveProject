@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
+using System.Drawing;
+
 namespace EuclidianDistanceClassifier
 {
     partial class MainWindow
@@ -34,102 +36,35 @@ namespace EuclidianDistanceClassifier
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.button1 = new MetroFramework.Controls.MetroButton();
-            this.metroTextBox1 = new MetroFramework.Controls.MetroTextBox();
-            this.metroProgressSpinner1 = new MetroFramework.Controls.MetroProgressSpinner();
-            this.metroTabControl1 = new MetroFramework.Controls.MetroTabControl();
-            this.metroTabPage1 = new MetroFramework.Controls.MetroTabPage();
-            this.metroTabPage2 = new MetroFramework.Controls.MetroTabPage();
+            this.tabPage2 = new MetroFramework.Controls.MetroTabPage();
             this.metroGrid1 = new MetroFramework.Controls.MetroGrid();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.metroLabel1 = new MetroFramework.Controls.MetroLabel();
-            this.metroTabControl1.SuspendLayout();
-            this.metroTabPage1.SuspendLayout();
-            this.metroTabPage2.SuspendLayout();
+            this.tabPage1 = new MetroFramework.Controls.MetroTabPage();
+            this.gestureLabel = new MetroFramework.Controls.MetroLabel();
+            this.gestureImage = new System.Windows.Forms.PictureBox();
+            this.comPortTextBox = new MetroFramework.Controls.MetroTextBox();
+            this.startBtn = new MetroFramework.Controls.MetroButton();
+            this.tabControl = new MetroFramework.Controls.MetroTabControl();
+            this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.metroGrid1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.tabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gestureImage)).BeginInit();
+            this.tabControl.SuspendLayout();
             this.SuspendLayout();
             // 
-            // button1
+            // tabPage2
             // 
-            this.button1.Location = new System.Drawing.Point(23, 116);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(132, 37);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Start";
-            this.button1.UseSelectable = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // metroTextBox1
-            // 
-            this.metroTextBox1.Lines = new string[] {"Enter COM port here"};
-            this.metroTextBox1.Location = new System.Drawing.Point(24, 64);
-            this.metroTextBox1.MaxLength = 32767;
-            this.metroTextBox1.Name = "metroTextBox1";
-            this.metroTextBox1.PasswordChar = '\0';
-            this.metroTextBox1.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.metroTextBox1.SelectedText = "";
-            this.metroTextBox1.Size = new System.Drawing.Size(131, 23);
-            this.metroTextBox1.TabIndex = 1;
-            this.metroTextBox1.Text = "Enter COM port here";
-            this.metroTextBox1.UseSelectable = true;
-            this.metroTextBox1.Click += new System.EventHandler(this.metroTextBox1_Click);
-            // 
-            // metroProgressSpinner1
-            // 
-            this.metroProgressSpinner1.Location = new System.Drawing.Point(61, 177);
-            this.metroProgressSpinner1.Maximum = 100;
-            this.metroProgressSpinner1.Name = "metroProgressSpinner1";
-            this.metroProgressSpinner1.Size = new System.Drawing.Size(49, 41);
-            this.metroProgressSpinner1.TabIndex = 2;
-            this.metroProgressSpinner1.UseSelectable = true;
-            // 
-            // metroTabControl1
-            // 
-            this.metroTabControl1.Controls.Add(this.metroTabPage1);
-            this.metroTabControl1.Controls.Add(this.metroTabPage2);
-            this.metroTabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.metroTabControl1.Location = new System.Drawing.Point(20, 60);
-            this.metroTabControl1.Name = "metroTabControl1";
-            this.metroTabControl1.SelectedIndex = 0;
-            this.metroTabControl1.Size = new System.Drawing.Size(592, 364);
-            this.metroTabControl1.TabIndex = 0;
-            this.metroTabControl1.UseSelectable = true;
-
-            // 
-            // metroTabPage1
-            // 
-            this.metroTabPage1.Controls.Add(this.metroLabel1);
-            this.metroTabPage1.Controls.Add(this.pictureBox1);
-            this.metroTabPage1.Controls.Add(this.metroProgressSpinner1);
-            this.metroTabPage1.Controls.Add(this.metroTextBox1);
-            this.metroTabPage1.Controls.Add(this.button1);
-            this.metroTabPage1.HorizontalScrollbarBarColor = true;
-            this.metroTabPage1.HorizontalScrollbarHighlightOnWheel = false;
-            this.metroTabPage1.HorizontalScrollbarSize = 10;
-            this.metroTabPage1.Location = new System.Drawing.Point(4, 38);
-            this.metroTabPage1.Name = "metroTabPage1";
-            this.metroTabPage1.Size = new System.Drawing.Size(584, 322);
-            this.metroTabPage1.TabIndex = 1;
-            this.metroTabPage1.Text = "Running";
-            this.metroTabPage1.VerticalScrollbarBarColor = true;
-            this.metroTabPage1.VerticalScrollbarHighlightOnWheel = false;
-            this.metroTabPage1.VerticalScrollbarSize = 10;
-            // 
-            // metroTabPage2
-            // 
-            this.metroTabPage2.Controls.Add(this.metroGrid1);
-            this.metroTabPage2.HorizontalScrollbarBarColor = true;
-            this.metroTabPage2.HorizontalScrollbarHighlightOnWheel = false;
-            this.metroTabPage2.HorizontalScrollbarSize = 10;
-            this.metroTabPage2.Location = new System.Drawing.Point(4, 38);
-            this.metroTabPage2.Name = "metroTabPage2";
-            this.metroTabPage2.Size = new System.Drawing.Size(584, 322);
-            this.metroTabPage2.TabIndex = 2;
-            this.metroTabPage2.Text = "Data";
-            this.metroTabPage2.VerticalScrollbarBarColor = true;
-            this.metroTabPage2.VerticalScrollbarHighlightOnWheel = false;
-            this.metroTabPage2.VerticalScrollbarSize = 10;
+            this.tabPage2.Controls.Add(this.metroGrid1);
+            this.tabPage2.HorizontalScrollbarBarColor = true;
+            this.tabPage2.HorizontalScrollbarHighlightOnWheel = false;
+            this.tabPage2.HorizontalScrollbarSize = 10;
+            this.tabPage2.Location = new System.Drawing.Point(4, 38);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Size = new System.Drawing.Size(584, 322);
+            this.tabPage2.TabIndex = 2;
+            this.tabPage2.Text = "Data";
+            this.tabPage2.VerticalScrollbarBarColor = true;
+            this.tabPage2.VerticalScrollbarHighlightOnWheel = false;
+            this.tabPage2.VerticalScrollbarSize = 10;
             // 
             // metroGrid1
             // 
@@ -177,51 +112,114 @@ namespace EuclidianDistanceClassifier
             this.metroGrid1.Size = new System.Drawing.Size(580, 308);
             this.metroGrid1.TabIndex = 2;
             // 
-            // pictureBox1
+            // tabPage1
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(216, 22);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(339, 234);
-            this.pictureBox1.TabIndex = 3;
-            this.pictureBox1.TabStop = false;
+            this.tabPage1.Controls.Add(this.gestureLabel);
+            this.tabPage1.Controls.Add(this.gestureImage);
+            this.tabPage1.Controls.Add(this.comPortTextBox);
+            this.tabPage1.Controls.Add(this.startBtn);
+            this.tabPage1.HorizontalScrollbarBarColor = true;
+            this.tabPage1.HorizontalScrollbarHighlightOnWheel = false;
+            this.tabPage1.HorizontalScrollbarSize = 10;
+            this.tabPage1.Location = new System.Drawing.Point(4, 38);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Size = new System.Drawing.Size(584, 322);
+            this.tabPage1.TabIndex = 1;
+            this.tabPage1.Text = "Running";
+            this.tabPage1.VerticalScrollbarBarColor = true;
+            this.tabPage1.VerticalScrollbarHighlightOnWheel = false;
+            this.tabPage1.VerticalScrollbarSize = 10;
+            this.tabPage1.BackgroundImage = Image.FromFile("Images\\Background.jpg");
+            
+            
             // 
-            // metroLabel1
+            // gestureLabel
             // 
-            this.metroLabel1.AutoSize = true;
-            this.metroLabel1.Location = new System.Drawing.Point(346, 273);
-            this.metroLabel1.Name = "metroLabel1";
-            this.metroLabel1.Size = new System.Drawing.Size(83, 19);
-            this.metroLabel1.TabIndex = 4;
-            this.metroLabel1.Text = "metroLabel1";
+            this.gestureLabel.AutoSize = true;
+            this.gestureLabel.Location = new System.Drawing.Point(346, 273);
+            this.gestureLabel.Name = "gestureLabel";
+            this.gestureLabel.Size = new System.Drawing.Size(0, 0);
+            this.gestureLabel.TabIndex = 4;
+            // 
+            // gestureImage
+            // 
+            ThumbsUp = Image.FromFile("Images\\ThumbsUp.png");
+            Flat = Image.FromFile("Images\\Flat.png");
+            PeaceSign = Image.FromFile("Images\\PeaceSign.png");
+            this.gestureImage.Location = new System.Drawing.Point(240, 36);
+            this.gestureImage.Name = "gestureImage";
+            this.gestureImage.Size = new System.Drawing.Size(310, 209);
+
+            // 
+            // comPortTextBox
+            // 
+            this.comPortTextBox.Lines = new string[] {
+        "Enter COM port here"};
+            this.comPortTextBox.Location = new System.Drawing.Point(24, 64);
+            this.comPortTextBox.MaxLength = 32767;
+            this.comPortTextBox.Name = "comPortTextBox";
+            this.comPortTextBox.PasswordChar = '\0';
+            this.comPortTextBox.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.comPortTextBox.SelectedText = "";
+            this.comPortTextBox.Size = new System.Drawing.Size(131, 23);
+            this.comPortTextBox.TabIndex = 1;
+            this.comPortTextBox.Text = "Enter COM port here";
+            this.comPortTextBox.UseSelectable = true;
+            this.comPortTextBox.Click += new System.EventHandler(this.comPortTextBox_Click);
+            // 
+            // startBtn
+            // 
+            this.startBtn.Location = new System.Drawing.Point(23, 116);
+            this.startBtn.Name = "startBtn";
+            this.startBtn.Size = new System.Drawing.Size(132, 37);
+            this.startBtn.TabIndex = 0;
+            this.startBtn.Text = "Start";
+            this.startBtn.UseSelectable = true;
+            this.startBtn.Click += new System.EventHandler(this.startBtn_Click);
+            // 
+            // tabControl
+            // 
+            this.tabControl.Controls.Add(this.tabPage1);
+            this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl.Location = new System.Drawing.Point(20, 60);
+            this.tabControl.Name = "tabControl";
+            this.tabControl.SelectedIndex = 0;
+            this.tabControl.Size = new System.Drawing.Size(592, 364);
+            this.tabControl.TabIndex = 0;
+            this.tabControl.UseSelectable = true;
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(632, 444);
-            this.Controls.Add(this.metroTabControl1);
+            this.Controls.Add(this.tabControl);
             this.Name = "MainWindow";
             this.Text = "Gesture Recogniser";
-            this.metroTabControl1.ResumeLayout(false);
-            this.metroTabPage1.ResumeLayout(false);
-            this.metroTabPage1.PerformLayout();
-            this.metroTabPage2.ResumeLayout(false);
+            this.tabPage2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.metroGrid1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gestureImage)).EndInit();
+            this.tabControl.ResumeLayout(false);
             this.ResumeLayout(false);
+            
 
         }
 
         #endregion
 
-        private MetroFramework.Controls.MetroButton button1;
-        private MetroFramework.Controls.MetroTextBox metroTextBox1;
-        private MetroFramework.Controls.MetroProgressSpinner metroProgressSpinner1;
-        private MetroFramework.Controls.MetroTabControl metroTabControl1;
-        private MetroFramework.Controls.MetroTabPage metroTabPage2;
-        private MetroFramework.Controls.MetroTabPage metroTabPage1;
+
+        private Image ThumbsUp;
+        private Image PeaceSign;
+        private Image Flat;
+        private MetroFramework.Controls.MetroTabPage tabPage2;
         private MetroFramework.Controls.MetroGrid metroGrid1;
-        private MetroFramework.Controls.MetroLabel metroLabel1;
-        private PictureBox pictureBox1;
+        private MetroFramework.Controls.MetroTabPage tabPage1;
+        private MetroFramework.Controls.MetroLabel gestureLabel;
+        private PictureBox gestureImage;
+        private MetroFramework.Controls.MetroTextBox comPortTextBox;
+        private MetroFramework.Controls.MetroButton startBtn;
+        private MetroFramework.Controls.MetroTabControl tabControl;
     }
 }
