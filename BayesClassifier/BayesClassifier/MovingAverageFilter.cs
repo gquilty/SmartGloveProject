@@ -23,10 +23,10 @@ namespace GloveApplication
     /// </summary>
     public class MovingAverageFilter
     {
-        List<List<string>> lastValues = new List<List<string>>();
-        List<double> averagedData = new List<double>();
-        SharedBuffer sharedBuffer = new SharedBuffer();
-        Classifier classifier = new Classifier();
+        private List<List<string>> lastValues = new List<List<string>>();
+        private List<double> averagedData = new List<double>();
+        private SharedBuffer sharedBuffer = new SharedBuffer();
+        public Classifier classifier = new Classifier();
 
         /// <summary>
         /// The movingAverage() method takes in data from the glove and performs a simple moving average on this data 
@@ -70,14 +70,30 @@ namespace GloveApplication
                         {
 
                             value1 = double.Parse(lastValues[0][j]);
-
+                            if (value1 < -1.5)
+                            {
+                                value1 = 0;
+                            }
                             value2 = double.Parse(lastValues[1][j]);
-
+                            if (value2 < -1.5)
+                            {
+                                value2 = -1.5;
+                            }
                             value3 = double.Parse(lastValues[2][j]);
-
+                            if (value3 < -1.5)
+                            {
+                                value3 = -1.5;
+                            }
                             value4 = double.Parse(lastValues[3][j]);
-
+                            if (value4 < -1.5)
+                            {
+                                value4 = -1.5;
+                            }
                             value5 = double.Parse(lastValues[4][j]);
+                            if (value5 < -1.5)
+                            {
+                                value5 = -1.5;
+                            }
 
 
 
@@ -113,7 +129,7 @@ namespace GloveApplication
                         }
                     }
                     
-                    /*using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\Users\Ger\Desktop\NO_BEND.txt", true))
+                    /*using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\Users\Ger\Desktop\NO_BEND.dat", true))
                     {
                         Console.WriteLine("Writing to file\t" + averagedSnapshot);
                         file.WriteLine(averagedSnapshot);

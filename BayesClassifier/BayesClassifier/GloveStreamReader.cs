@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Globalization;
 using Disruptor;
 using Disruptor.Dsl;
+using System.Windows.Forms;
 
 namespace GloveApplication
 {
@@ -18,22 +19,20 @@ namespace GloveApplication
     /// The GloveStreamReader class is used to continuously pull data  from the glove and organise
     /// the data into concise packets for the averaging system and gesture recognition
     /// </summary>
-    class GloveStreamReader
+    public class GloveStreamReader
     {
         //Create a new Ring Buffer suplied by the Disruptor.Net library
-        DisruptorRingBuffer buffer = new DisruptorRingBuffer();
+        public DisruptorRingBuffer buffer = new DisruptorRingBuffer();
 
         /// <summary>
         /// readData() is the first method called in the namespace which begins reading from the serial I/O port
         /// continuously
         /// </summary>
-        public void readData()
+        public void readData(int comPort)
         {
             // Create a new SerialPort object with default settings.
             SerialPort _serialPort = new SerialPort();
-            Console.WriteLine("Input Port Number: ");
-            string port = Console.ReadLine();
-            string buildPort = "COM" + port;
+            string buildPort = "COM" + comPort;
             _serialPort.PortName = buildPort;
             _serialPort.BaudRate = 1000000;
             _serialPort.Parity = Parity.None;
@@ -55,15 +54,15 @@ namespace GloveApplication
             }
 
 
+            // Read line by line and pass to buffer
             while (true)
             {
-                //Read each character untill an '*' is detected
-
                 try
                 {
                     string value = _serialPort.ReadLine();
                     buffer.run(value);
                     value = "";
+                    Application.DoEvents();
                 }
                 catch (Exception ReadTimeoutExceptiom)
                 {

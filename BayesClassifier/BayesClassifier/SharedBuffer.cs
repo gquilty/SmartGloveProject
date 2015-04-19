@@ -18,7 +18,7 @@ namespace GloveApplication
 {
     class SharedBuffer
     {
-        private static readonly int _ringSize = 1 << 3;  // Must be multiple of 2
+        private static readonly int _ringSize = 1 << 4;  // Must be multiple of 2
         private Disruptor.Dsl.Disruptor<SharedBufferValue> disruptor;
         private RingBuffer<SharedBufferValue> ringBuffer;
 
@@ -35,23 +35,14 @@ namespace GloveApplication
 
         public void run(string dataSnapshot)
         {
+            long sequenceNo = ringBuffer.Next();
 
-            while (true)
-            {
-                long sequenceNo = ringBuffer.Next();
+            SharedBufferValue entry = ringBuffer[sequenceNo];
 
-                SharedBufferValue entry = ringBuffer[sequenceNo];
+            entry.Value = dataSnapshot;
 
-                entry.Value = dataSnapshot;
-
-                ringBuffer.Publish(sequenceNo);
-
-                //Debugging
-                //Console.WriteLine("Published entry {0}, value {1}", sequenceNo, entry.Value);
-                break;
-
-            }
-
+            ringBuffer.Publish(sequenceNo);
+            
         }
     }
 }

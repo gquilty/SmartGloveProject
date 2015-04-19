@@ -9,9 +9,16 @@ namespace EuclidianDistanceClassifier
 {
     public class Gesture
     {
-        public List<List<double> > RawData;
-        public List<double> AveragedData;
         public string GestureType;
+        public List<double> AveragedData;
+        public List<List<double>> RawData;
+
+        public Gesture()
+        {
+            RawData = new List<List<double>>();
+            this.GestureType = "default";
+            AveragedData = new List<double>();
+        }
 
         public Gesture(string gestureType)
         {
@@ -51,6 +58,17 @@ namespace EuclidianDistanceClassifier
             }
 
         }// calculateAverageData()
+
+
+        public void WriteXML()
+        {
+            System.Xml.Serialization.XmlSerializer writer =
+                new System.Xml.Serialization.XmlSerializer(typeof(Gesture));
+
+            System.IO.StreamWriter file = new System.IO.StreamWriter(@"GestureData\\" + this.GestureType + ".xml");
+            writer.Serialize(file, this);
+            file.Close();
+        }
 
     }// class Gesture
 

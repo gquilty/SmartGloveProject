@@ -12,11 +12,15 @@ using System.Globalization;
 using Disruptor;
 using Disruptor.Dsl;
 
+using EuclidianDistanceClassifier;
+using System.Windows.Forms;
+
 namespace GloveApplication
 {
     class Program
     {
-        
+
+        [STAThread]
         public static void Main()
         {
             new Program().run();
@@ -24,9 +28,8 @@ namespace GloveApplication
 
         public void run()
         {
-            GloveStreamReader input = new GloveStreamReader();
-
-            input.readData();
+            MainWindow window = new MainWindow();
+            Application.Run(window);
         }
     }
 }

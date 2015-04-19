@@ -15,17 +15,18 @@ using Disruptor.Dsl;
 namespace GloveApplication
 {
 
-    class DisruptorRingBuffer
+    public class DisruptorRingBuffer
     {
         private static readonly int _ringSize = 1 << 11;  // Must be multiple of 2
         private Disruptor.Dsl.Disruptor<ValueEntry>  disruptor;
         private RingBuffer<ValueEntry> ringBuffer;
+        public DataCommunicationHandler dch;
 
         public DisruptorRingBuffer()
         {
             disruptor = new Disruptor.Dsl.Disruptor<ValueEntry>(() => new ValueEntry(), _ringSize, TaskScheduler.Default);
 
-            DataCommunicationHandler dch = new DataCommunicationHandler();
+            dch = new DataCommunicationHandler();
             dch.avgLayer = new MovingAverageFilter();
             disruptor.HandleEventsWith(dch);
             ringBuffer = disruptor.Start();
