@@ -128,12 +128,6 @@ namespace GloveApplication
                         }
                     }
                     
-                    /*using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\Users\Ger\Desktop\NO_BEND.dat", true))
-                    {
-                        Console.WriteLine("Writing to file\t" + averagedSnapshot);
-                        file.WriteLine(averagedSnapshot);
-                    }*/
-                    
                     sharedBuffer.run(averagedSnapshot);
                     averagedData.Clear();
 

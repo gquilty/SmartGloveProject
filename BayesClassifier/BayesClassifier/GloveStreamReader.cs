@@ -40,7 +40,7 @@ namespace GloveApplication
             _serialPort.StopBits = StopBits.One;
             _serialPort.Handshake = Handshake.None;
 
-            _serialPort.ReadTimeout = 1500;
+            _serialPort.ReadTimeout = 15000;
             _serialPort.WriteTimeout = 500;
 
             try

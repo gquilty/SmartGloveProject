@@ -36,14 +36,20 @@ namespace EuclidianDistanceClassifier
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.tabPage2 = new MetroFramework.Controls.MetroTabPage();
             this.metroGrid1 = new MetroFramework.Controls.MetroGrid();
             this.tabPage1 = new MetroFramework.Controls.MetroTabPage();
+            this.recordTextBox = new MetroFramework.Controls.MetroTextBox();
+            this.recordLabel = new MetroFramework.Controls.MetroLabel();
+            this.recordToggle = new MetroFramework.Controls.MetroToggle();
             this.gestureLabel = new MetroFramework.Controls.MetroLabel();
             this.gestureImage = new System.Windows.Forms.PictureBox();
             this.comPortTextBox = new MetroFramework.Controls.MetroTextBox();
             this.startBtn = new MetroFramework.Controls.MetroButton();
             this.tabControl = new MetroFramework.Controls.MetroTabControl();
+            this.simulateToggle = new MetroFramework.Controls.MetroToggle();
+            this.simulateLabel = new MetroFramework.Controls.MetroLabel();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.metroGrid1)).BeginInit();
             this.tabPage1.SuspendLayout();
@@ -114,6 +120,11 @@ namespace EuclidianDistanceClassifier
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.simulateLabel);
+            this.tabPage1.Controls.Add(this.simulateToggle);
+            this.tabPage1.Controls.Add(this.recordTextBox);
+            this.tabPage1.Controls.Add(this.recordLabel);
+            this.tabPage1.Controls.Add(this.recordToggle);
             this.tabPage1.Controls.Add(this.gestureLabel);
             this.tabPage1.Controls.Add(this.gestureImage);
             this.tabPage1.Controls.Add(this.comPortTextBox);
@@ -126,12 +137,48 @@ namespace EuclidianDistanceClassifier
             this.tabPage1.Size = new System.Drawing.Size(584, 322);
             this.tabPage1.TabIndex = 1;
             this.tabPage1.Text = "Running";
+            this.tabPage1.Theme = MetroFramework.MetroThemeStyle.Dark;
             this.tabPage1.VerticalScrollbarBarColor = true;
             this.tabPage1.VerticalScrollbarHighlightOnWheel = false;
             this.tabPage1.VerticalScrollbarSize = 10;
-            this.tabPage1.BackgroundImage = Image.FromFile("Images\\Background.jpg");
-            
-            
+            // 
+            // recordTextBox
+            // 
+            this.recordTextBox.Lines = new string[] {
+        "Enter New Gesture Name"};
+            this.recordTextBox.Location = new System.Drawing.Point(23, 181);
+            this.recordTextBox.MaxLength = 32767;
+            this.recordTextBox.Name = "recordTextBox";
+            this.recordTextBox.PasswordChar = '\0';
+            this.recordTextBox.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.recordTextBox.SelectedText = "";
+            this.recordTextBox.Size = new System.Drawing.Size(167, 23);
+            this.recordTextBox.TabIndex = 8;
+            this.recordTextBox.Text = "Enter New Gesture Name";
+            this.recordTextBox.UseSelectable = true;
+            this.recordTextBox.Click += new System.EventHandler(this.recordTextBox_Click);
+            // 
+            // recordLabel
+            // 
+            this.recordLabel.AutoSize = true;
+            this.recordLabel.Location = new System.Drawing.Point(23, 141);
+            this.recordLabel.Name = "recordLabel";
+            this.recordLabel.Size = new System.Drawing.Size(57, 19);
+            this.recordLabel.TabIndex = 7;
+            this.recordLabel.Text = "Record?";
+            this.recordLabel.Theme = MetroFramework.MetroThemeStyle.Dark;
+            // 
+            // recordToggle
+            // 
+            this.recordToggle.AutoSize = true;
+            this.recordToggle.Location = new System.Drawing.Point(110, 143);
+            this.recordToggle.Name = "recordToggle";
+            this.recordToggle.Size = new System.Drawing.Size(80, 17);
+            this.recordToggle.TabIndex = 6;
+            this.recordToggle.Text = "Off";
+            this.recordToggle.Theme = MetroFramework.MetroThemeStyle.Dark;
+            this.recordToggle.UseSelectable = true;
+            this.recordToggle.CheckStateChanged += new System.EventHandler(this.record_Toggle);
             // 
             // gestureLabel
             // 
@@ -143,25 +190,23 @@ namespace EuclidianDistanceClassifier
             // 
             // gestureImage
             // 
-            ThumbsUp = Image.FromFile("Images\\ThumbsUp.png");
-            Flat = Image.FromFile("Images\\Flat.png");
-            PeaceSign = Image.FromFile("Images\\PeaceSign.png");
             this.gestureImage.Location = new System.Drawing.Point(240, 36);
             this.gestureImage.Name = "gestureImage";
             this.gestureImage.Size = new System.Drawing.Size(310, 209);
-
+            this.gestureImage.TabIndex = 5;
+            this.gestureImage.TabStop = false;
             // 
             // comPortTextBox
             // 
             this.comPortTextBox.Lines = new string[] {
         "Enter COM port here"};
-            this.comPortTextBox.Location = new System.Drawing.Point(24, 64);
+            this.comPortTextBox.Location = new System.Drawing.Point(24, 36);
             this.comPortTextBox.MaxLength = 32767;
             this.comPortTextBox.Name = "comPortTextBox";
             this.comPortTextBox.PasswordChar = '\0';
             this.comPortTextBox.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.comPortTextBox.SelectedText = "";
-            this.comPortTextBox.Size = new System.Drawing.Size(131, 23);
+            this.comPortTextBox.Size = new System.Drawing.Size(166, 23);
             this.comPortTextBox.TabIndex = 1;
             this.comPortTextBox.Text = "Enter COM port here";
             this.comPortTextBox.UseSelectable = true;
@@ -169,11 +214,12 @@ namespace EuclidianDistanceClassifier
             // 
             // startBtn
             // 
-            this.startBtn.Location = new System.Drawing.Point(23, 116);
+            this.startBtn.Location = new System.Drawing.Point(23, 74);
             this.startBtn.Name = "startBtn";
-            this.startBtn.Size = new System.Drawing.Size(132, 37);
+            this.startBtn.Size = new System.Drawing.Size(167, 37);
             this.startBtn.TabIndex = 0;
             this.startBtn.Text = "Start";
+            this.startBtn.Theme = MetroFramework.MetroThemeStyle.Light;
             this.startBtn.UseSelectable = true;
             this.startBtn.Click += new System.EventHandler(this.startBtn_Click);
             // 
@@ -186,16 +232,42 @@ namespace EuclidianDistanceClassifier
             this.tabControl.SelectedIndex = 0;
             this.tabControl.Size = new System.Drawing.Size(592, 364);
             this.tabControl.TabIndex = 0;
+            this.tabControl.Theme = MetroFramework.MetroThemeStyle.Dark;
             this.tabControl.UseSelectable = true;
+            // 
+            // simulateToggle
+            // 
+            this.simulateToggle.AutoSize = true;
+            this.simulateToggle.Location = new System.Drawing.Point(110, 258);
+            this.simulateToggle.Name = "simulateToggle";
+            this.simulateToggle.Size = new System.Drawing.Size(80, 17);
+            this.simulateToggle.TabIndex = 9;
+            this.simulateToggle.Text = "Off";
+            this.simulateToggle.Theme = MetroFramework.MetroThemeStyle.Dark;
+            this.simulateToggle.UseSelectable = true;
+            this.simulateToggle.CheckStateChanged += new System.EventHandler(this.simulate_Toggle);
+            // 
+            // simulateLabel
+            // 
+            this.simulateLabel.AutoSize = true;
+            this.simulateLabel.Location = new System.Drawing.Point(23, 256);
+            this.simulateLabel.Name = "simulateLabel";
+            this.simulateLabel.Size = new System.Drawing.Size(65, 19);
+            this.simulateLabel.TabIndex = 10;
+            this.simulateLabel.Text = "Simulate?";
+            this.simulateLabel.Theme = MetroFramework.MetroThemeStyle.Dark;
+            
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.ClientSize = new System.Drawing.Size(632, 444);
             this.Controls.Add(this.tabControl);
             this.Name = "MainWindow";
             this.Text = "Gesture Recogniser";
+            this.Theme = MetroFramework.MetroThemeStyle.Dark;
             this.tabPage2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.metroGrid1)).EndInit();
             this.tabPage1.ResumeLayout(false);
@@ -203,7 +275,6 @@ namespace EuclidianDistanceClassifier
             ((System.ComponentModel.ISupportInitialize)(this.gestureImage)).EndInit();
             this.tabControl.ResumeLayout(false);
             this.ResumeLayout(false);
-            
 
         }
 
@@ -221,5 +292,10 @@ namespace EuclidianDistanceClassifier
         private MetroFramework.Controls.MetroTextBox comPortTextBox;
         private MetroFramework.Controls.MetroButton startBtn;
         private MetroFramework.Controls.MetroTabControl tabControl;
+        private MetroFramework.Controls.MetroLabel recordLabel;
+        private MetroFramework.Controls.MetroToggle recordToggle;
+        private MetroFramework.Controls.MetroTextBox recordTextBox;
+        private MetroFramework.Controls.MetroLabel simulateLabel;
+        private MetroFramework.Controls.MetroToggle simulateToggle;
     }
 }

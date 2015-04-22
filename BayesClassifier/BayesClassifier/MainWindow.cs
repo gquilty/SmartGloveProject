@@ -37,23 +37,22 @@ namespace EuclidianDistanceClassifier
             glove.readData(comPort);            
         }
 
-        public void SetImage(int gestureType)
+        public void SetImage(int gestureType, string gestureName)
         {
+            gestureLabel.Invoke((MethodInvoker)(() => gestureLabel.Text = gestureName));
+
             try
             {
                 switch (gestureType)
                 {
                     case 1:
                         gestureImage.Image = Flat;
-                        gestureLabel.Invoke((MethodInvoker)(() => gestureLabel.Text = "No Bend"));
                         break;
                     case 2:
                         gestureImage.Image = ThumbsUp;
-                        gestureLabel.Invoke((MethodInvoker)(() => gestureLabel.Text = "Thumbs Up"));
                         break;
                     case 3:
                         gestureImage.Image = PeaceSign;
-                        gestureLabel.Invoke((MethodInvoker)(() => gestureLabel.Text = "Peace Sign"));
                         break;
                 }
             }
@@ -72,6 +71,23 @@ namespace EuclidianDistanceClassifier
         private void comPortTextBox_Click(object sender, EventArgs e)
         {
             comPortTextBox.Text = "";
+        }
+
+        private void recordTextBox_Click(object sender, EventArgs e)
+        {
+            recordTextBox.Text = "";
+        }
+
+
+        private void record_Toggle(object sender, EventArgs e)
+        {
+            classifierRef.Recording = !classifierRef.Recording;
+            classifierRef.RecordingName = recordTextBox.Text;
+        }
+
+        private void simulate_Toggle(object sender, EventArgs e)
+        {
+            classifierRef.Simulate = !classifierRef.Simulate;
         }
     }
 }

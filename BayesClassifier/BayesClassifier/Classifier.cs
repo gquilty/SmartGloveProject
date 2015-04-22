@@ -19,15 +19,32 @@ namespace EuclidianDistanceClassifier
         
         public List<Gesture> KnownGestures;
         private Dictionary<string, int> GestureTypes;
+        private List<int> RegisteredGestures;
 
         private int BinningBoundary;
         private int LaplacianSmoothingFactor;
+        private int NumRegisteredGestures;
+
+        private int NumBendSensors;
+
+        public bool Recording;
+        public string RecordingName;
+
+        public bool Simulate;
 
         public Classifier()
         {
             KnownGestures = new List<Gesture>();
+            RegisteredGestures = new List<int>();
             BinningBoundary = 3;
             LaplacianSmoothingFactor = 1;
+            NumRegisteredGestures = 25;
+
+            NumBendSensors = 6;
+
+            Recording = false;
+            RecordingName = "";
+            Simulate = false;
         }
 
         public void Setup()
@@ -63,6 +80,14 @@ namespace EuclidianDistanceClassifier
         
         public void handleBufferEntry(string dataSample)
         {
+
+            if (Simulate)
+            {
+                SimulateFromFile();
+                return;
+            }
+
+
             int j = 0;
             // dataSample has the current line of text
             string[] splitData = dataSample.Split(',');
@@ -71,7 +96,7 @@ namespace EuclidianDistanceClassifier
             // This is for printing only, to show the data for the demo.
             string binnedSnapshotValues = "";
 
-            for (int i = 0; i < splitData.Count() - 6; i++)
+            for (int i = 0; i < splitData.Count() - NumBendSensors; i++)
             {
                 int parsedValue = BinValue(splitData[i]);
                 parsedData.Add(parsedValue);
@@ -79,10 +104,72 @@ namespace EuclidianDistanceClassifier
                 binnedSnapshotValues += " " + parsedValue;
             }
 
-            string received = Classify(parsedData);
+            if (Recording)
+            {
+                RecordGesture(dataSample, RecordingName);
+            }
+
+            string recognisedGesture = Classify(parsedData);
+
             // Debugging
-            Console.WriteLine(binnedSnapshotValues + "\n\t" + received);
+            Console.WriteLine(binnedSnapshotValues + "\n\t" + recognisedGesture);
             //
+
+            if (RegisteredGestures.Count() >= NumRegisteredGestures)
+            {
+                // Averages the last 25 or so gestures (defined by NumRegisteredGestures) and gets the most common one.
+                // Avoids the gesture changing rapidly from accidental hand movements
+                int MostCommonGesture = GetCurrentGesture();
+                var GestureTypesInverse = GestureTypes.ToDictionary(x => x.Value, x => x.Key);
+                recognisedGesture = GestureTypesInverse[MostCommonGesture];
+            }
+
+            gui.SetImage(GestureTypes[recognisedGesture], recognisedGesture);
+
+        }
+
+
+        public void SimulateFromFile()
+        {
+            string file = "GestureData\\SimulatedData.dat";
+            StreamReader dataStream = new StreamReader(file);
+            string dataSample;
+            int j = 0;
+            while ((dataSample = dataStream.ReadLine()) != null)
+            {
+                // dataSample has the current line of text
+                string[] splitData = dataSample.Split(',');
+                List<double> parsedData = new List<double>();
+
+                // This is for printing only, to show the data for the demo.
+                string binnedSnapshotValues = "";
+
+                for (int i = 0; i < splitData.Count() - NumBendSensors; i++)
+                {
+                    int parsedValue = BinValue(splitData[i]);
+                    parsedData.Add(parsedValue);
+
+                    binnedSnapshotValues += " " + parsedValue;
+                }
+
+                string recognisedGesture = Classify(parsedData);
+
+                // Debugging
+                //Console.WriteLine(binnedSnapshotValues + "\n\t" + recognisedGesture);
+                //
+
+                if (RegisteredGestures.Count() >= NumRegisteredGestures)
+                {
+                    // Averages the last 25 or so gestures (defined by NumRegisteredGestures) and gets the most common one.
+                    // Avoids the gesture changing rapidly from accidental hand movements
+                    int MostCommonGesture = GetCurrentGesture();
+                    var GestureTypesInverse = GestureTypes.ToDictionary(x => x.Value, x => x.Key);
+                    recognisedGesture = GestureTypesInverse[MostCommonGesture];
+                }
+
+                gui.SetImage(GestureTypes[recognisedGesture], recognisedGesture);
+            }
+
         }
 
 
@@ -148,10 +235,37 @@ namespace EuclidianDistanceClassifier
                 }
                 lineNumber++;
 
-                Console.WriteLine(binnedTrainingValues);
+                //Console.WriteLine(binnedTrainingValues);
             }
 
             return new Gesture(gestureRawData, gestureType);
+        }
+
+
+        public void RecordGesture(string gestureData, string filename)
+        {
+            StreamWriter file;
+
+            // Gesture already exists in the program
+            if (GestureTypes.Keys.Contains(filename))
+            {
+                return;
+            }
+
+            // Gesture already recorded and added to GestureTypes.dat
+            if (!File.Exists("GestureData\\" + filename + ".dat"))
+            {
+                File.AppendAllText("GestureData\\GestureTypes.dat", Environment.NewLine + filename);
+            }
+
+            // Create the training data for the new gesture
+            // Program needs to be restarted
+            file = new StreamWriter(@"GestureData\\" + filename + ".dat", true);
+            //Console.WriteLine("Writing to file\t" + gestureData);
+            file.WriteLine(gestureData);
+            file.Close();
+
+            Console.WriteLine("Writing " + gestureData.Split(',').Count());
         }
 
         public int BinValue(string value)
@@ -159,6 +273,19 @@ namespace EuclidianDistanceClassifier
             return ((int)Double.Parse(value) / BinningBoundary) + LaplacianSmoothingFactor;
         }
 
+        /*
+         * Returns the most common gesture from the last 10 recorded gestures
+         * *
+         */
+        public int GetCurrentGesture()
+        {
+            int mostCommonGesture = (from i in RegisteredGestures
+                                    group i by i into grp
+                                    orderby grp.Count() descending
+                                    select grp.Key).First();
+
+            return mostCommonGesture;
+        }
 
         public string Classify(List<double> gloveSnapshot)
         {
@@ -191,8 +318,11 @@ namespace EuclidianDistanceClassifier
                                  where c.Value == lowestDistance
                                  select c.Key).First();
 
-            
-            gui.SetImage( GestureTypes[recognisedGesture] );
+            if (RegisteredGestures.Count() >= NumRegisteredGestures)
+            {
+                RegisteredGestures.RemoveAt(0);
+            }
+            RegisteredGestures.Add( GestureTypes[recognisedGesture]);
             
             return recognisedGesture;
         }
