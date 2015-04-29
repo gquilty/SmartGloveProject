@@ -159,7 +159,6 @@ namespace EuclidianDistanceClassifier
 
             // Transmit events
             txStatus = driver.XL_CanTransmit(portHandle, txMask, driverEvent);
-<<<<<<< HEAD
             //Console.WriteLine(txStatus);
 
         }
@@ -189,18 +188,10 @@ namespace EuclidianDistanceClassifier
                 txStatus = driver.XL_CanTransmit(portHandle, txMask, driverEvent);
                 Console.WriteLine(txStatus);
             }
-=======
-            Console.WriteLine(txStatus);
-
-        }
->>>>>>> f5268adffb7b7b2aa63b531d7405c8dca61e6df4
 
         }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> f5268adffb7b7b2aa63b531d7405c8dca61e6df4
+        
         private int PrintFunctionError()
         {
             Console.WriteLine("\nERROR: Function call failed!\nPress any key to close this application...");
@@ -249,7 +240,6 @@ namespace EuclidianDistanceClassifier
             Console.ReadKey();
         }
         // -----------------------------------------------------------------------------------------------
-
 
 
     } // class

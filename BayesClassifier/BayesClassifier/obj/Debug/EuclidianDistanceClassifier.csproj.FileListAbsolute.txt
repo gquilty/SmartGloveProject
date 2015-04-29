@@ -40,3 +40,17 @@ C:\Users\gavin\Desktop\development area\FYP\SmartGloveProject\BayesClassifier\Ba
 C:\Users\gavin\Desktop\development area\FYP\SmartGloveProject\BayesClassifier\BayesClassifier\obj\Debug\EuclidianDistanceClassifier.pdb
 =======
 >>>>>>> f5268adffb7b7b2aa63b531d7405c8dca61e6df4
+C:\SmartGloveProject\BayesClassifier\BayesClassifier\bin\Debug\EuclidianDistanceClassifier.exe.config
+C:\SmartGloveProject\BayesClassifier\BayesClassifier\obj\Debug\EuclidianDistanceClassifier.exe
+C:\SmartGloveProject\BayesClassifier\BayesClassifier\obj\Debug\EuclidianDistanceClassifier.pdb
+C:\SmartGloveProject\BayesClassifier\BayesClassifier\obj\Debug\EuclidianDistanceClassifier.csprojResolveAssemblyReference.cache
+C:\SmartGloveProject\BayesClassifier\BayesClassifier\obj\Debug\EuclidianDistanceClassifier.MainWindow.resources
+C:\SmartGloveProject\BayesClassifier\BayesClassifier\obj\Debug\EuclidianDistanceClassifier.Properties.Resources.resources
+C:\SmartGloveProject\BayesClassifier\BayesClassifier\obj\Debug\EuclidianDistanceClassifier.csproj.GenerateResource.Cache
+C:\SmartGloveProject\BayesClassifier\BayesClassifier\bin\Debug\EuclidianDistanceClassifier.exe
+C:\SmartGloveProject\BayesClassifier\BayesClassifier\bin\Debug\EuclidianDistanceClassifier.pdb
+C:\SmartGloveProject\BayesClassifier\BayesClassifier\bin\Debug\Disruptor.dll
+C:\SmartGloveProject\BayesClassifier\BayesClassifier\bin\Debug\MetroFramework.Design.dll
+C:\SmartGloveProject\BayesClassifier\BayesClassifier\bin\Debug\MetroFramework.dll
+C:\SmartGloveProject\BayesClassifier\BayesClassifier\bin\Debug\MetroFramework.Fonts.dll
+C:\SmartGloveProject\BayesClassifier\BayesClassifier\bin\Debug\vxlapi_NET.xml
