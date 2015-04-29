@@ -23,3 +23,20 @@ D:\College\Project\Git\SmartGloveProject\BayesClassifier\BayesClassifier\obj\Deb
 D:\College\Project\Git\SmartGloveProject\BayesClassifier\BayesClassifier\obj\Debug\EuclidianDistanceClassifier.Properties.Resources.resources
 D:\College\Project\Git\SmartGloveProject\BayesClassifier\BayesClassifier\bin\Debug\vxlapi_NET.dll
 D:\College\Project\Git\SmartGloveProject\BayesClassifier\BayesClassifier\bin\Debug\vxlapi_NET.xml
+<<<<<<< HEAD
+C:\Users\gavin\Desktop\development area\FYP\SmartGloveProject\BayesClassifier\BayesClassifier\bin\Debug\EuclidianDistanceClassifier.exe.config
+C:\Users\gavin\Desktop\development area\FYP\SmartGloveProject\BayesClassifier\BayesClassifier\bin\Debug\EuclidianDistanceClassifier.exe
+C:\Users\gavin\Desktop\development area\FYP\SmartGloveProject\BayesClassifier\BayesClassifier\bin\Debug\EuclidianDistanceClassifier.pdb
+C:\Users\gavin\Desktop\development area\FYP\SmartGloveProject\BayesClassifier\BayesClassifier\bin\Debug\Disruptor.dll
+C:\Users\gavin\Desktop\development area\FYP\SmartGloveProject\BayesClassifier\BayesClassifier\bin\Debug\MetroFramework.Design.dll
+C:\Users\gavin\Desktop\development area\FYP\SmartGloveProject\BayesClassifier\BayesClassifier\bin\Debug\MetroFramework.dll
+C:\Users\gavin\Desktop\development area\FYP\SmartGloveProject\BayesClassifier\BayesClassifier\bin\Debug\MetroFramework.Fonts.dll
+C:\Users\gavin\Desktop\development area\FYP\SmartGloveProject\BayesClassifier\BayesClassifier\bin\Debug\vxlapi_NET.dll
+C:\Users\gavin\Desktop\development area\FYP\SmartGloveProject\BayesClassifier\BayesClassifier\obj\Debug\EuclidianDistanceClassifier.csprojResolveAssemblyReference.cache
+C:\Users\gavin\Desktop\development area\FYP\SmartGloveProject\BayesClassifier\BayesClassifier\obj\Debug\EuclidianDistanceClassifier.MainWindow.resources
+C:\Users\gavin\Desktop\development area\FYP\SmartGloveProject\BayesClassifier\BayesClassifier\obj\Debug\EuclidianDistanceClassifier.Properties.Resources.resources
+C:\Users\gavin\Desktop\development area\FYP\SmartGloveProject\BayesClassifier\BayesClassifier\obj\Debug\EuclidianDistanceClassifier.csproj.GenerateResource.Cache
+C:\Users\gavin\Desktop\development area\FYP\SmartGloveProject\BayesClassifier\BayesClassifier\obj\Debug\EuclidianDistanceClassifier.exe
+C:\Users\gavin\Desktop\development area\FYP\SmartGloveProject\BayesClassifier\BayesClassifier\obj\Debug\EuclidianDistanceClassifier.pdb
+=======
+>>>>>>> f5268adffb7b7b2aa63b531d7405c8dca61e6df4

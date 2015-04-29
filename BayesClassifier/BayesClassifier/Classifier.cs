@@ -121,18 +121,34 @@ namespace EuclidianDistanceClassifier
             //Console.WriteLine(binnedSnapshotValues + "\n\t" + recognisedGesture);
             //
 
+<<<<<<< HEAD
+            int MostCommon = 0;
+=======
             int MostCommonGesture = 0;
+>>>>>>> f5268adffb7b7b2aa63b531d7405c8dca61e6df4
             if (RegisteredGestures.Count() >= NumRegisteredGestures)
             {
                 // Averages the last 25 or so gestures (defined by NumRegisteredGestures) and gets the most common one.
                 // Avoids the gesture changing rapidly from accidental hand movements
+<<<<<<< HEAD
+                MostCommon = GetCurrentGesture();
+=======
                 MostCommonGesture = GetCurrentGesture();
+>>>>>>> f5268adffb7b7b2aa63b531d7405c8dca61e6df4
                 var GestureTypesInverse = GestureTypes.ToDictionary(x => x.Value, x => x.Key);
-                recognisedGesture = GestureTypesInverse[MostCommonGesture];
+                recognisedGesture = GestureTypesInverse[MostCommon];
             }
 
+            if (MostCommon != LastGesture)
+            {
+                xl.SendMessage(MostCommon);
+                LastGesture = MostCommon;
+            }
             gui.SetImage(GestureTypes[recognisedGesture], recognisedGesture);
+<<<<<<< HEAD
+=======
             xl.SendMessage(MostCommonGesture);
+>>>>>>> f5268adffb7b7b2aa63b531d7405c8dca61e6df4
         }
 
 

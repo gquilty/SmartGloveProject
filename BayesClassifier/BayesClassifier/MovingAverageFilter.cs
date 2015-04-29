@@ -26,14 +26,19 @@ namespace GloveApplication
         private List<List<string>> lastValues = new List<List<string>>();
         private List<double> averagedData = new List<double>();
         public SharedBuffer sharedBuffer = new SharedBuffer();
+        public List<double> XLData = new List<double>();
 
         /// <summary>
         /// The movingAverage() method takes in data from the glove and performs a simple moving average on this data 
         /// it then calibrates the data using normilization between -1 to 1 
         /// </summary>
         /// <param name="data">A packet of data recieved from the ring buffer that contains a snapshot of the glove</param>
+
+        int numSnapshots = 0;
         public void movingAverage2(string data)
         {
+
+            XLData = new List<double>();
             string[] currentData = data.Split(',');
              
             List<string> input  = new List<string>(currentData);
@@ -52,6 +57,7 @@ namespace GloveApplication
                     try
                     {
                         averagedData.Add(double.Parse(lastValues[4][0]));
+                        XLData.Add(double.Parse(lastValues[4][0]));
                     }
                     catch (Exception ex)
                     {
@@ -64,7 +70,7 @@ namespace GloveApplication
                         double value2;
                         double value3;
                         double value4;
-                        double value5;
+                        double value5;       
                         try
                         {
 
@@ -73,6 +79,8 @@ namespace GloveApplication
                             {
                                 value1 = 0;
                             }
+                            XLData.Add(value1);
+
                             value2 = double.Parse(lastValues[1][j]);
                             if (value2 < -1.5)
                             {
@@ -112,6 +120,9 @@ namespace GloveApplication
                         }
 
                     }
+
+                    if (numSnapshots % 5 == 0)
+                        sharedBuffer.sbh.classifier.xl.SendData(XLData);
                 
 
                     string averagedSnapshot = "";
@@ -127,7 +138,8 @@ namespace GloveApplication
                             averagedSnapshot += ((averagedData[i].ToString()) + ",");
                         }
                     }
-                    
+
+                    numSnapshots++;
                     sharedBuffer.run(averagedSnapshot);
                     averagedData.Clear();
 

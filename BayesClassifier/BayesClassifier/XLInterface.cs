@@ -159,12 +159,48 @@ namespace EuclidianDistanceClassifier
 
             // Transmit events
             txStatus = driver.XL_CanTransmit(portHandle, txMask, driverEvent);
-            Console.WriteLine(txStatus);
+<<<<<<< HEAD
+            //Console.WriteLine(txStatus);
 
         }
 
+        public void SendData(List<double> values)
+        {
+            
+            uint msgID = 0x80;
+            for (int i = 0; i < values.Count(); i++ )
+            {
+                XLDefine.XL_Status txStatus;
+                XLClass.xl_event driverEvent = new XLClass.xl_event();
+                byte[] valueAsBytes = BitConverter.GetBytes(values[i]);
+                driverEvent.tagData.can_Msg.id = msgID;
+                driverEvent.tagData.can_Msg.dlc = 8;
+                driverEvent.tagData.can_Msg.data[0] = valueAsBytes[0];
+                driverEvent.tagData.can_Msg.data[1] = valueAsBytes[1];
+                driverEvent.tagData.can_Msg.data[2] = valueAsBytes[2];
+                driverEvent.tagData.can_Msg.data[3] = valueAsBytes[3];
+                driverEvent.tagData.can_Msg.data[4] = valueAsBytes[4];
+                driverEvent.tagData.can_Msg.data[5] = valueAsBytes[5];
+                driverEvent.tagData.can_Msg.data[6] = valueAsBytes[6];
+                driverEvent.tagData.can_Msg.data[7] = valueAsBytes[7];
+                driverEvent.tag = XLDefine.XL_EventTags.XL_TRANSMIT_MSG;
+                msgID++;
 
+                txStatus = driver.XL_CanTransmit(portHandle, txMask, driverEvent);
+                Console.WriteLine(txStatus);
+            }
+=======
+            Console.WriteLine(txStatus);
 
+        }
+>>>>>>> f5268adffb7b7b2aa63b531d7405c8dca61e6df4
+
+        }
+
+<<<<<<< HEAD
+=======
+
+>>>>>>> f5268adffb7b7b2aa63b531d7405c8dca61e6df4
         private int PrintFunctionError()
         {
             Console.WriteLine("\nERROR: Function call failed!\nPress any key to close this application...");

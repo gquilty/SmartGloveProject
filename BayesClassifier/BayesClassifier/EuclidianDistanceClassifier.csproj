@@ -59,7 +59,11 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="vxlapi_NET">
+<<<<<<< HEAD
+      <HintPath>..\packages\XL\vxlapi_NET.dll</HintPath>
+=======
       <HintPath>..\..\..\..\..\..\Vector\Vector XL Driver Library\bin\vxlapi_NET.dll</HintPath>
+>>>>>>> f5268adffb7b7b2aa63b531d7405c8dca61e6df4
     </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>

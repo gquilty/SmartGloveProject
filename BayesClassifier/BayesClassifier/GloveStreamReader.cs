@@ -52,7 +52,11 @@ namespace GloveApplication
                 _serialPort.Close();
                 _serialPort.Open();
             }
+<<<<<<< HEAD
+            
+=======
             */
+>>>>>>> f5268adffb7b7b2aa63b531d7405c8dca61e6df4
 
             // Read line by line and pass to buffer
             while (true)
