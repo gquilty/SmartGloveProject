@@ -31,7 +31,7 @@ namespace GloveApplication
         public void readData(int comPort)
         {
             // Create a new SerialPort object with default settings.
-            SerialPort _serialPort = new SerialPort();
+            /*SerialPort _serialPort = new SerialPort();
             string buildPort = "COM" + comPort;
             _serialPort.PortName = buildPort;
             _serialPort.BaudRate = 1000000;
@@ -52,23 +52,24 @@ namespace GloveApplication
                 _serialPort.Close();
                 _serialPort.Open();
             }
-
+            */
 
             // Read line by line and pass to buffer
             while (true)
             {
                 try
                 {
-                    string value = _serialPort.ReadLine();
-                    buffer.run(value);
-                    value = "";
+                    //string value = _serialPort.ReadLine();
+                    //buffer.run(value);
+                    buffer.run("-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,");
+                    //value = "";
                     Application.DoEvents();
                 }
                 catch (Exception ReadTimeoutExceptiom)
                 {
                     Console.WriteLine("Timeout occured on Serial COM port.\t Trying again");
-                    _serialPort.Close();
-                    _serialPort.Open();
+                    //_serialPort.Close();
+                    //_serialPort.Open();
                 }
                 
             }

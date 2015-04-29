@@ -21,3 +21,5 @@ D:\College\Project\Git\SmartGloveProject\BayesClassifier\BayesClassifier\obj\Deb
 D:\College\Project\Git\SmartGloveProject\BayesClassifier\BayesClassifier\obj\Debug\EuclidianDistanceClassifier.csproj.GenerateResource.Cache
 D:\College\Project\Git\SmartGloveProject\BayesClassifier\BayesClassifier\obj\Debug\EuclidianDistanceClassifier.MainWindow.resources
 D:\College\Project\Git\SmartGloveProject\BayesClassifier\BayesClassifier\obj\Debug\EuclidianDistanceClassifier.Properties.Resources.resources
+D:\College\Project\Git\SmartGloveProject\BayesClassifier\BayesClassifier\bin\Debug\vxlapi_NET.dll
+D:\College\Project\Git\SmartGloveProject\BayesClassifier\BayesClassifier\bin\Debug\vxlapi_NET.xml

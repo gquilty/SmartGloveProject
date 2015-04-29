@@ -13,17 +13,21 @@ namespace EuclidianDistanceClassifier
         public List<double> AveragedData;
         public List<List<double>> RawData;
 
+        public bool userGenerated;
+
         public Gesture()
         {
             RawData = new List<List<double>>();
             this.GestureType = "default";
             AveragedData = new List<double>();
+            userGenerated = false;
         }
 
         public Gesture(string gestureType)
         {
             this.GestureType = gestureType;
             AveragedData = new List<double>();
+            userGenerated = false;
         }
 
 
@@ -32,6 +36,7 @@ namespace EuclidianDistanceClassifier
             this.RawData = rawData;
             this.GestureType = gestureType;
             AveragedData = new List<double>();
+            userGenerated = false;
         }
 
 

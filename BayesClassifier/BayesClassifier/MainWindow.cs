@@ -33,14 +33,16 @@ namespace EuclidianDistanceClassifier
             glove = new GloveStreamReader();
             classifierRef = glove.buffer.dch.avgLayer.sharedBuffer.sbh.classifier;
             classifierRef.gui = this;
+            populateGrid();
 
             glove.readData(comPort);            
         }
 
         public void SetImage(int gestureType, string gestureName)
         {
-            gestureLabel.Invoke((MethodInvoker)(() => gestureLabel.Text = gestureName));
-
+            string messageType = classifierRef.xl.MessageTypes[gestureType];
+            gestureLabel.Invoke((MethodInvoker)(() => gestureLabel.Text = gestureName + " / " + messageType));
+            
             try
             {
                 switch (gestureType)
@@ -49,10 +51,10 @@ namespace EuclidianDistanceClassifier
                         gestureImage.Image = Flat;
                         break;
                     case 2:
-                        gestureImage.Image = ThumbsUp;
+                        gestureImage.Image = PeaceSign;
                         break;
                     case 3:
-                        gestureImage.Image = PeaceSign;
+                        gestureImage.Image = ThumbsUp;
                         break;
                 }
             }
@@ -62,10 +64,19 @@ namespace EuclidianDistanceClassifier
             }
         }
 
+        bool startedOnce = false;
         private void startBtn_Click(object sender, EventArgs e)
         {
-            int comPort = (int)Double.Parse(comPortTextBox.Text);
-            StartGlove(comPort);
+            if (!startedOnce)
+            {
+                startBtn.Text = "Running...";
+                button1.Text = "Running...";
+                this.tabControl.SelectedIndex = 1;
+                int comPort = (int)Double.Parse(comPortTextBox.Text);
+                StartGlove(comPort);
+                classifierRef.Running = !classifierRef.Running;
+                startedOnce = true;
+            }
         }
 
         private void comPortTextBox_Click(object sender, EventArgs e)
@@ -81,13 +92,41 @@ namespace EuclidianDistanceClassifier
 
         private void record_Toggle(object sender, EventArgs e)
         {
+            if (classifierRef == null)
+                return;
+
             classifierRef.Recording = !classifierRef.Recording;
             classifierRef.RecordingName = recordTextBox.Text;
         }
 
         private void simulate_Toggle(object sender, EventArgs e)
         {
+            if (classifierRef == null)
+                return;
+
             classifierRef.Simulate = !classifierRef.Simulate;
+            classifierRef.SimulateFromFile();
         }
+
+        public void populateGrid()
+        {
+            if (classifierRef == null)
+                return;
+
+            List<Gesture> gestures = classifierRef.KnownGestures;
+
+            foreach (var g in gestures)
+            {
+                bool userGenerated = false;
+                string name = g.GestureType;
+                
+                string[] row = new string[] { g.GestureType, userGenerated ? "Yes" : "No" };
+                gestureGrid.Rows.Add(row);
+            }
+            
+        }
+
+
+
     }
 }

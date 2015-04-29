@@ -8,6 +8,7 @@ using System.IO;
 using MetroFramework.Forms;
 
 using GloveApplication;
+using System.Windows.Forms;
 
 
 namespace EuclidianDistanceClassifier
@@ -16,6 +17,7 @@ namespace EuclidianDistanceClassifier
     public class Classifier
     {
         public MainWindow gui;
+        public XLInterface xl;
         
         public List<Gesture> KnownGestures;
         private Dictionary<string, int> GestureTypes;
@@ -31,6 +33,7 @@ namespace EuclidianDistanceClassifier
         public string RecordingName;
 
         public bool Simulate;
+        public bool Running;
 
         public Classifier()
         {
@@ -45,6 +48,9 @@ namespace EuclidianDistanceClassifier
             Recording = false;
             RecordingName = "";
             Simulate = false;
+            Running = false;
+
+            xl = new XLInterface();
         }
 
         public void Setup()
@@ -69,6 +75,7 @@ namespace EuclidianDistanceClassifier
                 }
 
                 newGesture.calculateAverageData();
+                newGesture.userGenerated = false;
                 KnownGestures.Add(newGesture);
                 numGestures++;
             }
@@ -81,9 +88,8 @@ namespace EuclidianDistanceClassifier
         public void handleBufferEntry(string dataSample)
         {
 
-            if (Simulate)
+            if (Simulate || !Running)
             {
-                SimulateFromFile();
                 return;
             }
 
@@ -112,62 +118,81 @@ namespace EuclidianDistanceClassifier
             string recognisedGesture = Classify(parsedData);
 
             // Debugging
-            Console.WriteLine(binnedSnapshotValues + "\n\t" + recognisedGesture);
+            //Console.WriteLine(binnedSnapshotValues + "\n\t" + recognisedGesture);
             //
 
+            int MostCommonGesture = 0;
             if (RegisteredGestures.Count() >= NumRegisteredGestures)
             {
                 // Averages the last 25 or so gestures (defined by NumRegisteredGestures) and gets the most common one.
                 // Avoids the gesture changing rapidly from accidental hand movements
-                int MostCommonGesture = GetCurrentGesture();
+                MostCommonGesture = GetCurrentGesture();
                 var GestureTypesInverse = GestureTypes.ToDictionary(x => x.Value, x => x.Key);
                 recognisedGesture = GestureTypesInverse[MostCommonGesture];
             }
 
             gui.SetImage(GestureTypes[recognisedGesture], recognisedGesture);
-
+            xl.SendMessage(MostCommonGesture);
         }
 
 
+        int LastGesture = 0;
         public void SimulateFromFile()
         {
-            string file = "GestureData\\SimulatedData.dat";
-            StreamReader dataStream = new StreamReader(file);
-            string dataSample;
-            int j = 0;
-            while ((dataSample = dataStream.ReadLine()) != null)
-            {
-                // dataSample has the current line of text
-                string[] splitData = dataSample.Split(',');
-                List<double> parsedData = new List<double>();
+            while (Simulate) {
 
-                // This is for printing only, to show the data for the demo.
-                string binnedSnapshotValues = "";
-
-                for (int i = 0; i < splitData.Count() - NumBendSensors; i++)
+                string file = "GestureData\\SimulatedData.dat";
+                StreamReader dataStream = new StreamReader(file);
+                string dataSample;
+                int j = 0;
+                while ((dataSample = dataStream.ReadLine()) != null)
                 {
-                    int parsedValue = BinValue(splitData[i]);
-                    parsedData.Add(parsedValue);
+                    // dataSample has the current line of text
+                    string[] splitData = dataSample.Split(',');
+                    List<double> parsedData = new List<double>();
 
-                    binnedSnapshotValues += " " + parsedValue;
+                    // This is for printing only, to show the data for the demo.
+                    string binnedSnapshotValues = "";
+
+                    for (int i = 0; i < splitData.Count() - NumBendSensors; i++)
+                    {
+                        int parsedValue = BinValue(splitData[i]);
+                        parsedData.Add(parsedValue);
+
+                        binnedSnapshotValues += " " + parsedValue;
+                    }
+
+                    string recognisedGesture = Classify(parsedData);
+
+                    // Debugging
+                    //Console.WriteLine(binnedSnapshotValues + "\n\t" + recognisedGesture);
+                    //
+
+                    int MostCommon = 0;
+                    if (RegisteredGestures.Count() >= NumRegisteredGestures)
+                    {
+                        // Averages the last 25 or so gestures (defined by NumRegisteredGestures) and gets the most common one.
+                        // Avoids the gesture changing rapidly from accidental hand movements
+                        MostCommon = GetCurrentGesture();
+                        var GestureTypesInverse = GestureTypes.ToDictionary(x => x.Value, x => x.Key);
+                        recognisedGesture = GestureTypesInverse[MostCommon];
+                    }
+
+                    gui.SetImage(GestureTypes[recognisedGesture], recognisedGesture);
+
+
+                    if (MostCommon != LastGesture)
+                    {
+                        xl.SendMessage(MostCommon);
+                        LastGesture = MostCommon;
+                    }
+
+
+                    Application.DoEvents();
+                    System.Threading.Thread.Sleep(100);
                 }
 
-                string recognisedGesture = Classify(parsedData);
-
-                // Debugging
-                //Console.WriteLine(binnedSnapshotValues + "\n\t" + recognisedGesture);
-                //
-
-                if (RegisteredGestures.Count() >= NumRegisteredGestures)
-                {
-                    // Averages the last 25 or so gestures (defined by NumRegisteredGestures) and gets the most common one.
-                    // Avoids the gesture changing rapidly from accidental hand movements
-                    int MostCommonGesture = GetCurrentGesture();
-                    var GestureTypesInverse = GestureTypes.ToDictionary(x => x.Value, x => x.Key);
-                    recognisedGesture = GestureTypesInverse[MostCommonGesture];
-                }
-
-                gui.SetImage(GestureTypes[recognisedGesture], recognisedGesture);
+                
             }
 
         }

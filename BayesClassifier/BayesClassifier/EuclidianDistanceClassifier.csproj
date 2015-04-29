@@ -58,6 +58,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="vxlapi_NET">
+      <HintPath>..\..\..\..\..\..\Vector\Vector XL Driver Library\bin\vxlapi_NET.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
@@ -86,6 +89,7 @@
     <Compile Include="SharedBufferHandler.cs" />
     <Compile Include="SharedBufferValue.cs" />
     <Compile Include="ValueEntry.cs" />
+    <Compile Include="XLInterface.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
