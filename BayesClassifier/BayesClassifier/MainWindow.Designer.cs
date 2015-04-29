@@ -130,6 +130,7 @@ namespace EuclidianDistanceClassifier
             ThumbsUp = Image.FromFile("Images\\ThumbsUp.png");
             PeaceSign = Image.FromFile("Images\\PeaceSign.png");
             Flat = Image.FromFile("Images\\Flat.png");
+            OK = Image.FromFile("Images\\OK.png");
             // 
             // recordCheckbox
             // 
@@ -315,6 +316,7 @@ namespace EuclidianDistanceClassifier
         private Image ThumbsUp;
         private Image PeaceSign;
         private Image Flat;
+        private Image OK;
 
         private MetroFramework.Controls.MetroTabPage tabPage1;
         private MetroFramework.Controls.MetroTabPage tabPage2;

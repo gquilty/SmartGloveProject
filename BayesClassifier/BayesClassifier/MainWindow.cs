@@ -56,6 +56,9 @@ namespace EuclidianDistanceClassifier
                     case 3:
                         gestureImage.Image = ThumbsUp;
                         break;
+                    case 4:
+                        gestureImage.Image = OK;
+                        break;
                 }
             }
             catch (Exception ex)

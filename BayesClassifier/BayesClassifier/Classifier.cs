@@ -88,7 +88,7 @@ namespace EuclidianDistanceClassifier
         public void handleBufferEntry(string dataSample)
         {
 
-            if (Simulate || !Running)
+            if (Simulate)
             {
                 return;
             }
